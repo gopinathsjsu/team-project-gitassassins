@@ -1,9 +1,11 @@
-const express = require("express");
+import mongoInit from './utils/mongoInit.js'
 
-const PORT = process.env.PORT || 3001;
+import app from './app.js'
 
-const app = express();
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+import hotelController from './src/controller/hotelController.js'
+
+
+mongoInit();
+
+app.use(hotelController);
