@@ -8,8 +8,8 @@ var room = new Schema(
         type: { type: String },
         price: { type: Number },
         totalCount: { type: Number },
-        maximumOccupancy: { type: Number }
-
+        maximumOccupancy: { type: Number },
+        photoUrl: { type: String }
 })
 
 const Room = mongoose.model("Room", room);

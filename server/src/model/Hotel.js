@@ -15,20 +15,22 @@ var hotelSchema = new Schema(
             country: { type: String },
         },
         //hardcode or user input?
-        SeasonalHike: {
+        seasonalHike: {
             Holidays: 20,
             Weekend: 10        
         },
-        Rooms : [
+        rooms : [
             {
                 Room: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
             },
         ],
-        Customers : [
+        customers : [
             {
                 Room: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
             },
         ],
+
+        photoUrl: { type : String }
         
 })
 const Hotel = mongoose.model("Hotel", hotelSchema);
