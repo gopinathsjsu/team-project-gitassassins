@@ -14,20 +14,22 @@ var hotelSchema = new Schema(
             zipcode: { type: String },
             country: { type: String },
         },
-        // //hardcode or user input?
-        // SeasonalHike: {
-        //     Holidays: 10%
-        //     Weekend: 5%
+        //hardcode or user input?
+        SeasonalHike: {
+            Holidays: 20,
+            Weekend: 10        
+        },
+        Rooms : [
+            {
+                Room: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+            },
+        ],
+        Customers : [
+            {
+                Room: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
+            },
+        ],
         
-        // }
-        
-        // Rooms : Room[]
-        // Customers : Customer[]
-        
-        
-
-
-
 })
 const Hotel = mongoose.model("Hotel", hotelSchema);
 export default Hotel;
