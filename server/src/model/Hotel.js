@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-
-var hotelSchema = new Schema(
+const hotelSchema = new Schema(
     {
         hotelName:{ type: String },
         hotelAddress:
@@ -33,5 +32,6 @@ var hotelSchema = new Schema(
         photoUrl: { type : String }
         
 })
+
 const Hotel = mongoose.model("Hotel", hotelSchema);
 export default Hotel;

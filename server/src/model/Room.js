@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -14,4 +14,3 @@ var room = new Schema(
 
 const Room = mongoose.model("Room", room);
 export default Room;
-
