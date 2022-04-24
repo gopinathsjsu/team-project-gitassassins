@@ -11,6 +11,10 @@ const reservationSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Room",
 	},
+	hotelId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Hotel",
+	},
 	startDate: { type: Date },
 	endDate: { type: Date },
 	numberOfGuests: { type: Number },
