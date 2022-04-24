@@ -1,7 +1,10 @@
 import Hotel from "../model/Hotel.js";
 import Reservation from "../model/Reservation.js";
+import CommonService from "./CommonService.js";
 
+const commonService = new CommonService();
 class HotelService {
+
 	create = async (req, res) => {
 		try {
 			console.log(req.body);
@@ -38,37 +41,9 @@ class HotelService {
 
 				console.log(req.body);
 				// const hotel = await Hotel.findById(req.body.hotelId).populate("rooms");
-				const booked = await Reservation.aggregate([
-					{
-						$match: {
-								_id : req.body.hotelId,
-								startDate: {
-									$lte: req.body.startDate,
-								},
-								endDate : {
-									$gte: req.body.endDate
-								}
-							},
-					},
-					{
-							$count: "total_reserved"
-							
-					}
-				])
+				const booked = await commonService.getHotelReservations(req.body.hotelId, req.body.startDate, req.body.endDate);
 
-				const booked2 = Reservation.countDocuments(
-					{
-						_id : req.body.hotelId,
-						startDate: {
-							$lte: req.body.startDate,
-						},
-						endDate : {
-							$gte: req.body.endDate
-						}
-					},
-				)
-
-				console.log("booked: ", booked);
+				console.log("booked: ", booked.length);
 				res.status(200).send("");
 
 
