@@ -7,10 +7,12 @@ const reservationSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Customer",
 	},
-	roomId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Room",
-	},
+	rooms: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Room",
+		},
+	],
 	hotelId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Hotel",
@@ -40,6 +42,9 @@ const reservationSchema = new Schema({
 			type: Boolean,
 			default: false,
 		},
+	},
+	totalBill: {
+		type: Number,
 	},
 });
 
