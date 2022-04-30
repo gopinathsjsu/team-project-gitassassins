@@ -23,7 +23,7 @@ class HotelService {
 	};
 
 
-	get_location = async ( req, res ) => {
+	get_location = async ( req, res)  => {
 		
 		try {
 				const hotels = await Hotel.find({}, {hotelAddress:1});
