@@ -16,6 +16,28 @@ const hotelSchema = new Schema({
 		holidays: { type: Number, default: 20 },
 		weekend: { type: Number, default: 10 },
 	},
+	amenitiesCost: {
+		breakfastCost: {
+			type: Number,
+			default: false,
+		},
+		fitnessRoomCost: {
+			type: Number,
+			default: false,
+		},
+		poolCost: {
+			type: Number,
+			default: false,
+		},
+		parkingCost: {
+			type: Number,
+			default: false,
+		},
+		mealsCost: {
+			type: Number,
+			default: false,
+		},
+	},
 	photoUrl: {
 		type: String,
 		default:
