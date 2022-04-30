@@ -16,3 +16,6 @@ const customerSchema = new Schema({
 	},
 	rewardPoints: { type: Number },
 });
+
+const Customer = mongoose.model("Customer", customerSchema);
+export default Customer;
