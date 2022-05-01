@@ -4,6 +4,6 @@ import RoomService from "../service/RoomService.js";
 const roomController = express.Router();
 const roomService = new RoomService();
 
-roomController.post("/room/createRoom", roomService.create);
+roomController.post("/room/create", roomService.create);
 
 export default roomController;
