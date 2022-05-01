@@ -10,6 +10,7 @@ const reservationSchema = new Schema({
 	rooms: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
+			numberOfRooms: Number,
 			ref: "Room",
 		},
 	],
