@@ -26,6 +26,8 @@ export class RoomService {
 	searchRoomAvailability = async (req, res) => {
 		try {
 			console.log(req.query);
+
+			const hotelId = req.query.hotelId;
 			const startDate = new Date(req.query.startDate);
 			const endDate = new Date(req.query.endDate);
 
