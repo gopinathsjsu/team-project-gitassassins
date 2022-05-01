@@ -7,13 +7,13 @@ const hotelSchema = new Schema({
 	adminPassword: { type: String },
 	hotelName: { type: String },
 	hotelAddress: {
+		street: { type: String },
 		city: { type: String },
 		state: { type: String },
 		zipcode: { type: String },
-		country: { type: String },
 	},
 	seasonalHike: {
-		holidays: { type: Number, default: 20 },
+		holiday: { type: Number, default: 20 },
 		weekend: { type: Number, default: 10 },
 	},
 	amenitiesCost: {
