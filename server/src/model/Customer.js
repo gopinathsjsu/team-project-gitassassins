@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const customerSchema = new Schema({
 	firstName: { type: String },
 	lastName: { type: String },
-	email: { type: String },
+	email: { type: String, unique: true },
 	password: { type: String },
 	address: {
 		city: { type: String },
@@ -14,7 +14,7 @@ const customerSchema = new Schema({
 		zipcode: { type: String },
 		country: { type: String },
 	},
-	rewardPoints: { type: Number },
+	rewardPoints: { type: Number, default: 0 },
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
