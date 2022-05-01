@@ -1,9 +1,10 @@
 import express from "express";
-import RoomService from "../service/RoomService.js";
+import { RoomService } from "../service/RoomService.js";
 
 const roomController = express.Router();
 const roomService = new RoomService();
 
-roomController.post("/room/createRoom", roomService.create);
+roomController.post("/room/create", roomService.create);
+roomController.get("/room/search", roomService.searchRoomAvailability);
 
 export default roomController;

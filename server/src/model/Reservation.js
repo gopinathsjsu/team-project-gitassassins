@@ -18,6 +18,7 @@ const reservationSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Hotel",
 	},
+	roomType: { type: String },
 	startDate: { type: Date },
 	endDate: { type: Date },
 	numberOfGuests: { type: Number },
