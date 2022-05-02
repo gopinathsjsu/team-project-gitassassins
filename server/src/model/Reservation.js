@@ -7,13 +7,8 @@ const reservationSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Customer",
 	},
-	rooms: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			numberOfRooms: Number,
-			ref: "Room",
-		},
-	],
+	roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+	// store each room in the reservation as a single
 	hotelId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Hotel",
