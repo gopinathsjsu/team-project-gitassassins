@@ -1,4 +1,5 @@
 import Room from "../model/Room.js";
+import Reservation from "../model/Reservation.js";
 
 export class RoomService {
 	create = async (req, res) => {
@@ -35,21 +36,29 @@ export class RoomService {
 				hotelId: hotelId,
 				type: "SINGLE",
 			});
+			console.log(JSON.stringify(singleRoom));
+			console.log("Total SINGLE rooms: ", singleRoom[0].totalCount);
 
 			const kingRoom = await Room.find({
 				hotelId: hotelId,
 				type: "KING",
 			});
 
+			console.log("Total KING rooms: ", kingRoom[0].totalCount);
+
 			const queenRoom = await Room.find({
 				hotelId: hotelId,
 				type: "QUEEN",
 			});
 
+			console.log("Total QUEEN rooms: ", queenRoom[0].totalCount);
+
 			const suiteRoom = await Room.find({
 				hotelId: hotelId,
 				type: "SUITE",
 			});
+
+			console.log("Total SUITE rooms: ", suiteRoom[0].totalCount);
 
 			const singleRoomsBooked = await Reservation.find({
 				hotelId: hotelId,
@@ -118,35 +127,35 @@ export class RoomService {
 			const availability = {
 				single: {
 					availableRooms: Math.abs(
-						singleRoom.totalCount - singleRoomsBooked
+						singleRoom[0].totalCount - singleRoomsBooked
 					),
-					maximumOccupancy: singleRoom.maximumOccupancy,
-					price: singleRoom.price,
-					photoUrl: singleRoom.photoUrl,
+					maximumOccupancy: singleRoom[0].maximumOccupancy,
+					price: singleRoom[0].price,
+					photoUrl: singleRoom[0].photoUrl,
 				},
 				king: {
 					availableRooms: Math.abs(
-						kingRoom.totalCount - kingRoomsBooked
+						kingRoom[0].totalCount - kingRoomsBooked
 					),
-					maximumOccupancy: kingRoom.maximumOccupancy,
-					price: kingRoom.price,
-					photoUrl: kingRoom.photoUrl,
+					maximumOccupancy: kingRoom[0].maximumOccupancy,
+					price: kingRoom[0].price,
+					photoUrl: kingRoom[0].photoUrl,
 				},
 				queen: {
 					availableRooms: Math.abs(
-						queenRoom.totalCount - queenRoomsBooked
+						queenRoom[0].totalCount - queenRoomsBooked
 					),
-					maximumOccupancy: queenRoom.maximumOccupancy,
-					price: queenRoom.price,
-					photoUrl: queenRoom.photoUrl,
+					maximumOccupancy: queenRoom[0].maximumOccupancy,
+					price: queenRoom[0].price,
+					photoUrl: queenRoom[0].photoUrl,
 				},
 				suite: {
 					availableRooms: Math.abs(
-						suiteRoom.totalCount - suiteRoomsBooked
+						suiteRoom[0].totalCount - suiteRoomsBooked
 					),
-					maximumOccupancy: suiteRoom.maximumOccupancy,
-					price: suiteRoom.price,
-					photoUrl: suiteRoom.photoUrl,
+					maximumOccupancy: suiteRoom[0].maximumOccupancy,
+					price: suiteRoom[0].price,
+					photoUrl: suiteRoom[0].photoUrl,
 				},
 			};
 
