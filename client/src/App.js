@@ -6,6 +6,8 @@ import {Provider} from 'react-redux'
 import store from './redux/store'
 
 import home from './pages/home'
+import login from './pages/login'
+import signup from './pages/signup'
 
 import NavigationBar from './components/NavigationBar'
 
@@ -18,6 +20,8 @@ class App extends Component{
             <NavigationBar/>
             <Switch>
               <Route exact path="/" component={home} />
+              <Route exact path="/signup" component={signup} />
+              <Route exact path="/login" component={login} />
             </Switch>
           </div>
         </Router>
