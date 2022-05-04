@@ -45,4 +45,102 @@ export class ReservationService {
 			res.status(500).send("Error making reservation");
 		}
 	};
+
+	fetchAllReservationsByHotel = async(req, res) =>
+    {
+
+        try {
+
+			console.log(req.params.hotelId);
+            
+            const reservations = await Reservation.find(
+                {
+                    hotelId : req.params.hotelId
+                }
+            )
+
+            console.log("reservations ", reservations);
+			return res.status(200).send(reservations);
+
+
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+
+
+	fetchActiveReservationByHotel = async(req, res) => 
+	{
+		try {
+
+			var date = new Date();
+            const reservations = await Reservation.find(
+                {
+                    hotelId : req.params.hotelId,
+					endDate : {
+						$gte : date
+					}
+                }
+            )
+
+			return res.status(200).send(reservations);
+
+
+        } catch (err) {
+            console.error(err);
+        }
+
+		
+	}
+
+
+	fetchAllReservationsByCustomer = async(req, res) =>
+    {
+
+        try {
+
+			console.log(req.params.hotelId);
+            
+            const reservations = await Reservation.find(
+                {
+                    customerId : req.params.customerId
+                }
+            )
+
+            console.log("reservations ", reservations);
+			return res.status(200).send(reservations);
+
+
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+
+
+	fetchActiveReservationByCustomer = async(req, res) => 
+	{
+		try {
+
+			var date = new Date();
+            const reservations = await Reservation.find(
+                {
+                    customerId : req.params.customerId,
+					endDate : {
+						$gte : date
+					}
+                }
+            )
+
+			return res.status(200).send(reservations);
+
+
+        } catch (err) {
+            console.error(err);
+        }
+
+		
+	}
+
 }
