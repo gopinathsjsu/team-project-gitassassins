@@ -3,6 +3,13 @@ import withStyles from '@material-ui/core/styles/withStyles'
 
 import Grid from '@material-ui/core/Grid'
 
+import HotelCard from '../components/HotelCard'
+
+import {connect} from 'react-redux'
+import {  GET_ALL_HOTELS } from '../redux/types'
+import axios from 'axios'
+import store from '../redux/store'
+
 import landingPic from '../assets/landing.jpg'
 
 const styles = (theme) => ({
@@ -15,11 +22,45 @@ const styles = (theme) => ({
         backgroundPosition: 'center',
         width : window.innerWidth,
         height: '480px'
+    },
+    explore : {
+        paddingTop : '20px',
+        fontSize : '30px',
+        fontWeight : '800',
+        color : 'black',
+        justifyContent: 'center'
+    },
+    main : {
+        paddingBottom : '50px'
     }
 })
 
 class home extends Component {
-    
+    componentDidMount(){
+        console.log('load all hotels')
+        axios.get('hotel/getAll')
+            .then(res => {
+                console.log('load all restaurants'+JSON.stringify(res.data))
+                store.dispatch({
+                    type : GET_ALL_HOTELS,
+                    payload : res.data
+                })
+        })
+    }
+
+    displayHotels(){
+        if(this.props.hotel.allHotels.length > 0){
+            console.log("display restaurants"+JSON.stringify(this.props.user.location))
+            const allHotels = this.props.hotel.allHotels
+
+            let hotels = this.props.user.location === '' ? allHotels : allHotels.filter(hotel => {
+                return hotel.hotelAddress.city.includes(this.props.user.location)
+            })
+
+            return hotels.map(hotel => <HotelCard key={hotel._id} hotel = {hotel} />)
+        }
+    }
+
     render() {
         const { classes } = this.props
 
@@ -30,13 +71,20 @@ class home extends Component {
 
                     </div>
                 </Grid>
-
+                <Grid container item xs={12} className={classes.explore}>
+                    Explore Marriot Hotels around the country
+                </Grid>
                 <Grid container item sm={3} style={{paddingLeft : '20px'}}>
-                    {/* {this.displayRestaurants()} */}
+                    {this.displayHotels()}
                 </Grid>
             </Grid>
         )
     }
 }
 
-export default (withStyles(styles)(home))
+const mapStateToProps = (state) => ({
+    user : state.user,
+    hotel : state.hotel
+})
+
+export default connect(mapStateToProps, {} )(withStyles(styles)(home))

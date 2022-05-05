@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 
 import userReducer from './reducers/userReducer'
 import adminReducer from './reducers/adminReducer'
+import hotelReducer from './reducers/hotelReducer'
 
 const initialState ={}
 
@@ -10,7 +11,8 @@ const middleware = [thunk]
 
 const reducers = combineReducers({
     user : userReducer,
-    admin : adminReducer
+    admin : adminReducer,
+    hotel : hotelReducer
 })
 
 const store = createStore( reducers, initialState, compose(
