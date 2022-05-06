@@ -24,6 +24,45 @@ export class RoomService {
 
 	// delete can be done
 
+
+	searchRoomTypeAvaility = async(hotelId, startDate, endDate, roomType, roomRequired=1) => {
+			try {
+
+				console.log("roomType:", roomType);
+				
+					const rooms = await Room.findOne({
+						hotelId: hotelId,
+						type: roomType,
+					});
+
+					const totalRooms = rooms.totalCount;
+
+
+		
+
+					 const roomsBooked = await Reservation.find({
+						hotelId: hotelId,
+						startDate: {
+							$gte: startDate,
+						},
+						endDate: {
+							$lte: endDate,
+						},
+						roomType: roomType,
+					}).count();
+
+
+					console.log(totalRooms, roomsBooked, roomRequired);
+		
+					return totalRooms-roomsBooked >= roomRequired;
+
+			} catch (err){
+				console.log(err);
+			}
+
+
+	}
+
 	searchRoomAvailability = async (req, res) => {
 		try {
 			console.log(req.query);

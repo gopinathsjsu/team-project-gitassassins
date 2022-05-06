@@ -1,4 +1,10 @@
 import Reservation from "../model/Reservation.js";
+import { RoomService } from "../service/RoomService.js";
+import amenities from "../../utils/constants.js";
+import Room from "../model/Room.js";
+
+const roomService = new RoomService();
+
 
 export class ReservationService {
 	create = async (req, res) => {
@@ -142,5 +148,79 @@ export class ReservationService {
 
 		
 	}
+
+
+	updateReservation = async(req, res) => {
+
+
+		try{
+				const customerId = req.params.customerId;
+				const reservationId = req.params.reservationId;
+				const hotelId = req.body.hotelId;
+				const roomId = req.body.roomId;
+				const startDate = req.body.startDate;
+				const endDate = req.body.endDate;
+				const numberOfRooms = req.body.numberOfRooms;
+				const roomType = req.body.roomType;
+				const selectedAmenities = req.body.amenities;
+
+				var totalBill = 0
+
+				const newRoom = await Room.findOne({hotelId: hotelId,
+												type: roomType});
+
+				const newRoomPrice = newRoom.price;
+				const originalReservation = await Reservation.findOne({_id: reservationId});
+				const orginalBill = originalReservation.totalBill;
+		
+				totalBill += newRoomPrice;
+
+				//checking room availibilty 
+				if (!await roomService.searchRoomTypeAvaility(hotelId, startDate, endDate, roomType, numberOfRooms))
+					return res.status(200).send({
+						error: "Room not available for selected date"
+					});
+				
+				for (const [key, value] of Object.entries(selectedAmenities)) {
+					
+					if(value){
+						totalBill += amenities[key];
+					}
+
+				}
+
+				totalBill *= numberOfRooms;
+
+				const reservation = await Reservation.findOneAndUpdate(
+					{_id: reservationId},
+					{$set:
+						{
+							startDate:startDate,
+							endDate: endDate,
+							numberOfRooms: numberOfRooms,
+							roomType : roomType,
+							amenities: selectedAmenities,
+							totalBill: totalBill
+						}
+					},
+					{new : true}
+					
+					);
+				
+				console.log(reservation);
+
+
+			return res.status(200).send({
+				updatedReservation: reservation,
+				difference : totalBill-orginalBill
+			})
+	
+		} catch(err) {
+
+			console.error(err);
+		}
+	}
+
+	
 
 }
