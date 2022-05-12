@@ -18,6 +18,7 @@ const reservationSchema = new Schema({
 	endDate: { type: Date },
 	numberOfGuests: { type: Number },
 	status: { type: String },
+	numberOfRooms: {type: Number},
 	amenities: {
 		breakfast: {
 			type: Boolean,
