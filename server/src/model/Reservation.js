@@ -19,6 +19,7 @@ const reservationSchema = new Schema({
 	endDate: { type: Date },
 	numberOfGuests: { type: Number },
 	status: { type: String, enum: ["ACTIVE", "CANCELED"] },
+	numberOfRooms: {type: Number},
 	amenities: {
 		breakfast: {
 			type: Boolean,
