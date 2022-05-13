@@ -69,6 +69,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "SINGLE",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -85,6 +86,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "KING",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -101,6 +103,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "QUEEN",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -117,6 +120,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "SUITE",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
