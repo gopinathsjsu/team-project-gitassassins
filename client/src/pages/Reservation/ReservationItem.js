@@ -279,6 +279,7 @@ export default function ReservationItem ({item}) {
         </Menu>
       </div>
         {updateModal()}
+        {cancelModal()}
 
     </div>
   
