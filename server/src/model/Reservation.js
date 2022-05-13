@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const reservationSchema = new Schema({
+	reservationId: { type: String },
 	customerId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Customer",
@@ -17,7 +18,7 @@ const reservationSchema = new Schema({
 	startDate: { type: Date },
 	endDate: { type: Date },
 	numberOfGuests: { type: Number },
-	status: { type: String },
+	status: { type: String, enum: ["ACTIVE", "CANCELED"] },
 	amenities: {
 		breakfast: {
 			type: Boolean,
