@@ -12,3 +12,7 @@ hotelController.get(
 	"/hotel/search/:location",
 	hotelService.searchHotelByLocation
 );
+hotelController.put(
+	"/hotel/update-amenities",
+	hotelService.updateAmenitiesPrice
+);

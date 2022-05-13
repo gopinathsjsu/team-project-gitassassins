@@ -54,6 +54,49 @@ export class HotelService {
 		}
 	};
 
+	updateAmenitiesPrice = async (req, res) => {
+		console.log(req.body);
+
+		const hotelId = req.body.hotelId;
+
+		try {
+			const hotelDoc = await Hotel.findById(hotelId);
+
+			const updatedAmenitiesCost = {
+				breakfastCost: req.body.breakfastCost
+					? req.body.breakfastCost
+					: hotelDoc.amenitiesCost.breakfastCost,
+				fitnessRoomCost: req.body.fitnessRoomCost
+					? req.body.fitnessRoomCost
+					: hotelDoc.amenitiesCost.fitnessRoomCost,
+				poolCost: req.body.poolCost
+					? req.body.poolCost
+					: hotelDoc.amenitiesCost.poolCost,
+				parkingCost: req.body.parkingCost
+					? req.body.parkingCost
+					: hotelDoc.amenitiesCost.parkingCost,
+				mealsCost: req.body.mealsCost
+					? req.body.mealsCost
+					: hotelDoc.amenitiesCost.mealsCost,
+			};
+
+			try {
+				await Hotel.updateOne(
+					{ _id: hotelId },
+					{ $set: { amenitiesCost: updatedAmenitiesCost } }
+				);
+			} catch (err) {
+				console.error(err);
+				res.status(500).send("Error in updating hotel");
+			}
+		} catch (err) {
+			console.error(err);
+			res.status(404).send("Error in fetching hotel to be updated");
+		}
+
+		res.status(200).send("Updated amenities cost");
+	};
+
 	fetchHotels = async (req, res) => {
 		try {
 			const response = await Hotel.find();
