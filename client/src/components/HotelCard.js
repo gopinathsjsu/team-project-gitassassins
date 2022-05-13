@@ -26,24 +26,12 @@ const styles = (theme) => ({
         maxWidth: '300px',
         paddingLeft : '10px'
     },
-    del : {
-        color : '#919191',
-        fontSize : '14px',
-    },
     link : {
         "&:hover": {
             textDecoration : 'none',
         },
         marginRight : '26px',
         marginTop : '30px',
-    },
-    favBorder : {
-        color : 'white',
-        paddingLeft : '270px',
-    },
-    fav : {
-        color : 'white',
-        paddingLeft : '270px',
     },
     image : {
         width : '300px',
@@ -52,7 +40,6 @@ const styles = (theme) => ({
         objectFit : 'cover',
         resize: 'both',
         backgroundPosition: 'center',
-        
     },
     address : {
         fontSize : '15px',
