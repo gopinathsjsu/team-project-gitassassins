@@ -33,15 +33,19 @@ export class RoomService {
 			const updatedRoomDocument = {
 				hotelId: roomDocument.hotelId,
 				type: roomDocument.type,
-				totalCount: req.body.totalCount,
-				maximumOccupancy: req.body.maximumOccupancy,
-				price: req.body.price,
+				totalCount: req.body.totalCount
+					? req.body.totalCount
+					: roomDocument.totalCount,
+				maximumOccupancy: req.body.maximumOccupancy
+					? req.body.maximumOccupancy
+					: roomDocument.maximumOccupancy,
+				price: req.body.price ? req.body.price : roomDocument.price,
 				photoUrl: roomDocument.photoUrl,
 			};
 
 			try {
 				await Room.updateOne(
-					{ roomId: roomId },
+					{ _id: roomId },
 					{
 						$set: updatedRoomDocument,
 					}
