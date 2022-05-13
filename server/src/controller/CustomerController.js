@@ -10,3 +10,7 @@ customerController.get(
 	customerService.fetchCustomerById
 );
 customerController.get("/customer/login", customerService.validateLogin);
+customerController.get(
+	"/customer/loyalty/:customerId",
+	customerService.computeLoyaltyDiscount
+);
