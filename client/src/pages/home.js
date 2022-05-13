@@ -54,7 +54,7 @@ class home extends Component {
             const allHotels = this.props.hotel.allHotels
 
             let hotels = this.props.user.location === '' ? allHotels : allHotels.filter(hotel => {
-                return hotel.hotelAddress.city.includes(this.props.user.location)
+                return hotel.hotelAddress.city.toLowerCase().includes(this.props.user.location.toLowerCase())
             })
 
             return hotels.map(hotel => <HotelCard key={hotel._id} hotel = {hotel} />)

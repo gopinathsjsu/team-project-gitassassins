@@ -61,12 +61,12 @@ class signup extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        var newUser = {
-            firstname : this.state.firstname,
-            lastname : this.state.lastname,
-            email : this.state.email,
-            password : this.state.password,
-        }
+        // var newUser = {
+        //     firstname : this.state.firstname,
+        //     lastname : this.state.lastname,
+        //     email : this.state.email,
+        //     password : this.state.password,
+        // }
         // this.props.signupUser(newUser, this.props.history)
     }
 

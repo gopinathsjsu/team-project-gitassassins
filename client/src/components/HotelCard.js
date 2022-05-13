@@ -69,10 +69,10 @@ class HotelCard extends Component {
 
     render(){
         const { classes } = this.props
-        const { hotelName, photoUrl , hotelAddress} = this.props.hotel
+        const { _id, hotelName, photoUrl , hotelAddress} = this.props.hotel
 
         return (
-            <MuiLink component = {Link} to ={ `/hotel/${hotelName}`} className={classes.link} > 
+            <MuiLink component = {Link} to ={ `/hotel/get/${_id}`} className={classes.link} > 
                 <Grid container className={classes.card}>
                     <Grid container item xs={12}>
                         {/* <CardMedia component="img" height="140" image={photoUrl}  /> */}

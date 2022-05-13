@@ -63,10 +63,10 @@ class login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        var newUser = {
-            email : this.state.email,
-            password : this.state.password
-        }
+        // var newUser = {
+        //     email : this.state.email,
+        //     password : this.state.password
+        // }
         // this.props.loginUser(newUser, this.props.history)
     }
 

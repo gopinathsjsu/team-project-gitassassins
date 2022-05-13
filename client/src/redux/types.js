@@ -1,2 +1,3 @@
 export const GET_ALL_HOTELS = 'GET_ALL_HOTELS'
 export const LOCATION_FILTER = 'LOCATION_FILTER'
+export const GET_HOTEL = 'GET_HOTEL'
