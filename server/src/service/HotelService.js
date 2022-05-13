@@ -9,7 +9,7 @@ export class HotelService {
 
 			const newHotel = new Hotel({
 				adminEmail: req.body.adminEmail,
-				adminPassword: req.body.adminPasssword,
+				adminPassword: req.body.adminPassword,
 				hotelName: req.body.hotelName,
 				hotelAddress: req.body.hotelAddress,
 				seasonalHike: req.body.seasonalHike,
@@ -21,6 +21,36 @@ export class HotelService {
 			return res.status(200).send(response);
 		} catch (err) {
 			console.error(err);
+		}
+	};
+
+	validateLogin = async (req, res) => {
+		const email = req.query.email;
+		const password = req.query.password;
+
+		try {
+			const response = await Hotel.findOne({
+				adminEmail: email,
+			});
+
+			if (response.adminPassword !== password) {
+				console.log("Password mismatch");
+				res.status(400).send({ validCredentials: false });
+			} else {
+				const hotelId = response.id;
+				res.cookie("hotelId", hotelId, {
+					maxAge: 3600000,
+					httpOnly: false,
+					path: "/",
+				});
+
+				res.status(200).send({
+					validCredentials: true,
+				});
+			}
+		} catch (err) {
+			console.error("Error => ", err);
+			res.status(500).send("Could not validate hotel");
 		}
 	};
 
