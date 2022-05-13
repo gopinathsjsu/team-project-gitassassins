@@ -1,4 +1,5 @@
 import Customer from "../model/Customer.js";
+import Reservation from "../model/Reservation.js";
 
 export class CustomerService {
 	create = async (req, res) => {
@@ -55,6 +56,24 @@ export class CustomerService {
 		try {
 			const response = await Customer.findById(customerId);
 			return res.status(200).send(response);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	computeLoyaltyDiscount = async (req, res) => {
+		const customerId = req.params.customerId;
+		try {
+			const bookings = await Reservation.find({ customerId: customerId });
+			let numberOfNights = 0;
+			for (const booking of bookings) {
+				const start = new Date(booking.startDate);
+				const end = new Date(booking.endDate);
+				const difference =
+					(end.getTime() - start.getTime()) / (1000 * 3600 * 24);
+				numberOfNights += difference;
+			}
+			res.status(200).send({ loyaltyDiscount: numberOfNights * 0.5 });
 		} catch (err) {
 			console.error(err);
 		}

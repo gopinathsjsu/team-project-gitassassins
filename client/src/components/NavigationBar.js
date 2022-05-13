@@ -8,7 +8,9 @@ import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase'
 import { Link } from 'react-router-dom'
 
-// import {connect} from 'react-redux'
+import {connect} from 'react-redux'
+import store from '../redux/store'
+import {LOCATION_FILTER} from '../redux/types'
 
 const styles = (theme) => ({
     ...theme.spread,
@@ -62,9 +64,23 @@ const styles = (theme) => ({
 
 class NavigationBar extends Component {
    
+    state = {
+        location : ''
+    }
+
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name] : event.target.value 
+        })
+
+        store.dispatch({
+            type : LOCATION_FILTER,
+            payload : this.state.location
+        })
+    }
+
     render(){
         const { classes } = this.props
-        // const {authenticated} = this.props.user
 
         return (
             <div >
@@ -85,7 +101,7 @@ class NavigationBar extends Component {
                             name="location"
                             className={classes.location}
                             placeholder="Enter a location"
-                            // onChange={this.handleChange}
+                            onChange={this.handleChange}
                             startAdornment={<SearchIcon style={{color : '#2b2b2b'}} />}
                         />
                         {/* signup */}                                            
@@ -110,9 +126,8 @@ class NavigationBar extends Component {
     }
 }
 
-// const mapStateToProps = (state) => ({
-//     user : state.user,
-//     admin : state.admin,
-// })
+const mapStateToProps = (state) => ({
+    user : state.user
+})
 
-export default (withStyles(styles)(NavigationBar))
+export default connect(mapStateToProps, {} )(withStyles(styles)(NavigationBar))

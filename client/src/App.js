@@ -8,6 +8,7 @@ import store from './redux/store'
 import home from './pages/home'
 import login from './pages/login'
 import signup from './pages/signup'
+import hotel from './pages/hotel'
 
 import Reservation from './pages/Reservation/reservation'
 
@@ -25,6 +26,7 @@ class App extends Component{
               <Route exact path="/signup" component={signup} />
               <Route exact path="/login" component={login} />
               <Route exact path ="/customer/reservations" component = {Reservation} />
+              <Route exact path="/hotel/get/:hotelId" component={hotel} />
             </Switch>
           </div>
         </Router>

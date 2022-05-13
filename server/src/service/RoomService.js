@@ -22,46 +22,81 @@ export class RoomService {
 		}
 	};
 
+	update = async (req, res) => {
+		console.log(req.body);
+
+		const roomId = req.body.roomId;
+
+		try {
+			const roomDocument = await Room.findById(roomId);
+
+			const updatedRoomDocument = {
+				hotelId: roomDocument.hotelId,
+				type: roomDocument.type,
+				totalCount: req.body.totalCount
+					? req.body.totalCount
+					: roomDocument.totalCount,
+				maximumOccupancy: req.body.maximumOccupancy
+					? req.body.maximumOccupancy
+					: roomDocument.maximumOccupancy,
+				price: req.body.price ? req.body.price : roomDocument.price,
+				photoUrl: roomDocument.photoUrl,
+			};
+
+			try {
+				await Room.updateOne(
+					{ _id: roomId },
+					{
+						$set: updatedRoomDocument,
+					}
+				);
+			} catch (err) {
+				console.error(err);
+			}
+		} catch (err) {
+			console.error(err);
+		}
+
+		return res.status(200).send("Updated");
+	};
+
 	// delete can be done
 
+	searchRoomTypeAvaility = async (
+		hotelId,
+		startDate,
+		endDate,
+		roomType,
+		roomRequired = 1
+	) => {
+		try {
+			console.log("roomType:", roomType);
 
-	searchRoomTypeAvaility = async(hotelId, startDate, endDate, roomType, roomRequired=1) => {
-			try {
+			const rooms = await Room.findOne({
+				hotelId: hotelId,
+				type: roomType,
+			});
 
-				console.log("roomType:", roomType);
-				
-					const rooms = await Room.findOne({
-						hotelId: hotelId,
-						type: roomType,
-					});
+			const totalRooms = rooms.totalCount;
 
-					const totalRooms = rooms.totalCount;
+			const roomsBooked = await Reservation.find({
+				hotelId: hotelId,
+				startDate: {
+					$gte: startDate,
+				},
+				endDate: {
+					$lte: endDate,
+				},
+				roomType: roomType,
+			}).count();
 
+			console.log(totalRooms, roomsBooked, roomRequired);
 
-		
-
-					 const roomsBooked = await Reservation.find({
-						hotelId: hotelId,
-						startDate: {
-							$gte: startDate,
-						},
-						endDate: {
-							$lte: endDate,
-						},
-						roomType: roomType,
-					}).count();
-
-
-					console.log(totalRooms, roomsBooked, roomRequired);
-		
-					return totalRooms-roomsBooked >= roomRequired;
-
-			} catch (err){
-				console.log(err);
-			}
-
-
-	}
+			return totalRooms - roomsBooked >= roomRequired;
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	searchRoomAvailability = async (req, res) => {
 		try {
@@ -108,6 +143,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "SINGLE",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -124,6 +160,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "KING",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -140,6 +177,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "QUEEN",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(
@@ -156,6 +194,7 @@ export class RoomService {
 					$lte: endDate,
 				},
 				roomType: "SUITE",
+				status: "ACTIVE",
 			}).count();
 
 			console.log(

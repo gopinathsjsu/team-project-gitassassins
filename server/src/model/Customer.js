@@ -14,7 +14,7 @@ const customerSchema = new Schema({
 		zipcode: { type: String },
 		country: { type: String },
 	},
-	rewardPoints: { type: Number, default: 0 },
+	rewardPoints: { type: Number, default: 0.0 },
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
