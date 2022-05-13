@@ -8,9 +8,13 @@ import store from '../redux/store'
 
 import Grid from '@material-ui/core/Grid'
 import ReservationDialogue from '../components/ReservationDialogue'
+import RoomCard from '../components/RoomCard'
 
 const styles = (theme) => ({
     ...theme.spread,
+    main : {
+        marginBottom : '50px'
+    },
     nameLoc : {
         position: 'absolute',
         top: '240px',
@@ -58,12 +62,16 @@ class hotel extends Component {
         }
         ,500)
     }
+
+    displayRooms = () => {
+        return this.props.hotel.availability.map(room => <RoomCard key={room.type} room = {room} />)
+    }
    
     render() {
         const { _id, hotelName, hotelAddress, photoUrl} = this.props.hotel.selectedHotel
         const { classes } = this.props
         return (
-            <Grid direction="row" container>
+            <Grid direction="row" container className={classes.main}>
                 <Grid item sm={12} style={{height: '250px'}}>
                     <div>
                         <img src={photoUrl} alt={hotelName} className={classes.photoUrl} />
@@ -79,6 +87,10 @@ class hotel extends Component {
                     <Grid item sm={12} style={{justifyContent: 'center'}}>                        
                         <ReservationDialogue hotelId={_id}/>
                     </Grid>
+                </Grid>
+
+                <Grid direction="row" container item>                     
+                    {this.displayRooms()}
                 </Grid>
             </Grid>
         )
