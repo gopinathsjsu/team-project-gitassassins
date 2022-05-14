@@ -9,7 +9,7 @@ customerController.get(
 	"/customer/get/:customerId",
 	customerService.fetchCustomerById
 );
-customerController.get("/customer/login", customerService.validateLogin);
+customerController.post("/customer/login", customerService.validateLogin);
 customerController.get(
 	"/customer/loyalty/:customerId",
 	customerService.computeLoyaltyDiscount
