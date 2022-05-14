@@ -10,7 +10,6 @@ import Checkbox from '@mui/material/Checkbox'
 import {connect} from 'react-redux'
 import {  SET_SELECTED_ROOM } from '../redux/types'
 import store from '../redux/store'
-import { Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 const styles = (theme) => ({
@@ -133,7 +132,7 @@ class RoomCard extends Component {
 
     render(){
         const { classes } = this.props
-        const { type, price, photoUrl} = this.props.room
+        const { type, price, photoUrl, maxOccupancy} = this.props.room
         let amenitiesRate = 100
         let roomRate = 100
         return (
@@ -169,6 +168,13 @@ class RoomCard extends Component {
                             style={{marginBottom: '10px'}} value={this.state.numGuests} variant="outlined"  className={classes.input} />
                         </Grid>
 
+                        {this.state.numGuests/this.state.numRooms > maxOccupancy ? 
+                        (
+                            <Grid item xs={12} style={{color : 'red', marginLeft : '10px', marginBottom : '30px'}}>
+                                Max occupancy for the {type} room is {maxOccupancy}
+                            </Grid>
+                        ) : '' }
+                        
                         <Grid item xs={12} className={classes.amenities}>
                             Select amenities for you room
                         </Grid>

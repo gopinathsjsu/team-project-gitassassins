@@ -90,7 +90,7 @@ class hotel extends Component {
                 </Grid>
 
                 <Grid direction="row" container item>                     
-                    {this.displayRooms()}
+                    {this.props.hotel.roomSearch && this.displayRooms()}
                 </Grid>
             </Grid>
         )
