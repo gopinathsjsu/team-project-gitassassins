@@ -22,8 +22,8 @@ export class CustomerService {
 	};
 
 	validateLogin = async (req, res) => {
-		const email = req.query.email;
-		const password = req.query.password;
+		const email = req.body.email;
+		const password = req.body.password;
 
 		try {
 			const response = await Customer.findOne({
@@ -41,9 +41,7 @@ export class CustomerService {
 					path: "/",
 				});
 
-				res.status(200).send({
-					validCredentials: true,
-				});
+				res.status(200).send(response);
 			}
 		} catch (err) {
 			console.error("Error => ", err);
