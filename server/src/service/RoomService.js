@@ -233,9 +233,9 @@ export class RoomService {
 			let totalSurging = 0;
 			if (holidaySurging == true) {
 				totalSurging += 25;
-				if (weekendSurging == true) {
-					totalSurging += 15;
-				}
+			}
+			if (weekendSurging == true) {
+				totalSurging += 15;
 			}
 
 			if (totalSurging > 0) {
