@@ -12,6 +12,7 @@ import hotel from './pages/hotel'
 import checkout from './pages/checkout'
 
 import Reservation from './pages/Reservation/reservation'
+import Reservations from './pages/Reservation/Reservations'
 
 import NavigationBar from './components/NavigationBar'
 
@@ -29,6 +30,8 @@ class App extends Component{
               <Route exact path ="/customer/reservations" component = {Reservation} />
               <Route exact path="/hotel/get/:hotelId" component={hotel} />
               <Route exact path="/checkout" component={checkout} />
+              <Route exact path="/reservations" component={Reservations} />
+
             </Switch>
           </div>
         </Router>

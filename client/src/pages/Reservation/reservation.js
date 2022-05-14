@@ -10,6 +10,7 @@ import "./reservation.css";
 export default function Reservation() {
 
   const [reservations, setReservations] = useState([]);
+  const [reservationByIds, setReservationByIds] = useState({});
 
   useEffect(() => {
 
@@ -18,25 +19,50 @@ export default function Reservation() {
       .then(response => {
         console.log("Reservations by customer", response.data);
         setReservations(response.data);
+        const ids = {}
+        response.data.map((data, i) =>  {
+          if (!ids[data.reservationId]) {
+            ids[data.reservationId] = [];
+          }
+        ids[data.reservationId].push(data);
+        }  )
+        console.log("ids", ids)
+        setReservationByIds(ids);
       })
       .catch(err => {
         if (err.response && err.response.data) {
           console.log("Error", err.response);
         }
       });
-  }, [])
+    }, [])
 
 
 
   return (
     <>
-
-      {reservations.map((item, i) => (
-        <ReservationItem key={i} item = {item} />
-       
-      )
-      )
-      }
+     { Object.keys(reservationByIds).map((key, index) => ( 
+          
+        <div className="my_individual_appointment_container"
+        style={{
+          marginRight: 20,
+          marginLeft: 20
+        }}>
+              <div className="my_appointment_date_square">
+              <p>
+                {reservationByIds[key][0].startDate.slice(0, 10)
+                }
+              </p>
+           
+            </div>
+              { reservationByIds[key].map((item, i) => (
+                  <ReservationItem key={i} item = {item} /> 
+                  )) 
+              }
+          </div>
+        ))
+        
+     }
+   
     </>
   );
 }

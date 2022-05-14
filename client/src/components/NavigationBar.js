@@ -104,7 +104,10 @@ class NavigationBar extends Component {
                             onChange={this.handleChange}
                             startAdornment={<SearchIcon style={{color : '#2b2b2b'}} />}
                         />
-                        {/* signup */}                                            
+                        {/* signup */}     
+                        <Button className={classes.button} component = {Link} to="/reservations" >
+                            Reservations
+                        </Button>                                                
                         <Button className={classes.button} component = {Link} to="/signup" >
                             Signup
                         </Button>    
@@ -112,7 +115,9 @@ class NavigationBar extends Component {
                         {/* login */}
                         <Button className={classes.button} component = {Link} to="/login" >
                             Login
-                        </Button>                           
+                        </Button>  
+
+                                         
 
                         {/* logout */}                        
                         {/* {authenticated && ( 
