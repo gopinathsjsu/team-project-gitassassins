@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button } from '@material-ui/core'
 
 import {connect} from 'react-redux'
+import { ROOM_SEARCH } from '../redux/types'
+import store from '../redux/store'
 import axios from 'axios'
 
 const styles = (theme) => ({
@@ -90,6 +92,9 @@ class ReservationDialogue extends Component {
         axios.post('/room/search', newRoomSearch)
             .then(res => {
                 console.log('room search'+JSON.stringify(res.data))
+            })
+            store.dispatch({
+                type : ROOM_SEARCH,
             })
     }
 

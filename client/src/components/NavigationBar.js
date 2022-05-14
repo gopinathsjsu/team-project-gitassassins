@@ -6,6 +6,8 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import MuiLink from '@material-ui/core/Link'
 import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase'
+import Avatar from '@material-ui/core/Avatar'
+import Tooltip from '@material-ui/core/Tooltip'
 import { Link } from 'react-router-dom'
 
 import {connect} from 'react-redux'
@@ -81,7 +83,7 @@ class NavigationBar extends Component {
 
     render(){
         const { classes } = this.props
-
+        const { authenticated, authenticatedUser } = this.props.user
         return (
             <div >
                 <AppBar position="relative" color="transparent" className={classes.appbar} >
@@ -104,21 +106,29 @@ class NavigationBar extends Component {
                             onChange={this.handleChange}
                             startAdornment={<SearchIcon style={{color : '#2b2b2b'}} />}
                         />
-                        {/* signup */}                                            
+
+                        {/* signup */}  
+                        {!authenticated && (                                          
                         <Button className={classes.button} component = {Link} to="/signup" >
                             Signup
                         </Button>    
+                        )}
 
                         {/* login */}
+                        {!authenticated && (
                         <Button className={classes.button} component = {Link} to="/login" >
                             Login
-                        </Button>                           
+                        </Button>     
+                        )}                      
 
-                        {/* logout */}                        
-                        {/* {authenticated && ( 
-                            <Tooltip title="Logout" >
+                        {authenticated && ( 
+                            <Tooltip title="Profile" >
+                                <Button component = {Link} to="/" >
+                                    <Avatar>{authenticatedUser.firstName.substring(0,1)}{authenticatedUser.lastName.substring(0,1)}</Avatar>
+                                </Button>
                             </Tooltip>
-                        )} */}
+                        )}    
+                                  
                     </Toolbar>
                 </AppBar>
             </div>

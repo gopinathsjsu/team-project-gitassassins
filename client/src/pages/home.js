@@ -68,13 +68,12 @@ class home extends Component {
             <Grid direction="row" container className={classes.main}>
                 <Grid container item sm={12}>
                     <div className={classes.landingPic}>
-
                     </div>
                 </Grid>
                 <Grid container item xs={12} className={classes.explore}>
                     Explore Marriot Hotels around the country
                 </Grid>
-                <Grid container item sm={3} style={{paddingLeft : '20px'}}>
+                <Grid container direction="row" item xs={12} style={{paddingLeft : '20px'}}>
                     {this.displayHotels()}
                 </Grid>
             </Grid>
