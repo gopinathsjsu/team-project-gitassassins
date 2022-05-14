@@ -124,6 +124,14 @@ class NavigationBar extends Component {
 								<Button
 									className={classes.button}
 									component={Link}
+									to="/reservations"
+								>
+									Reservations
+								</Button>
+
+								<Button
+									className={classes.button}
+									component={Link}
 									to="/signup"
 								>
 									Signup

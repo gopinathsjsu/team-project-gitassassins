@@ -202,4 +202,30 @@ export class ReservationService {
 			console.error(err);
 		}
 	};
+
+
+
+	cancelReservation = async(req, res) => {
+		try{
+		const reservationId = req.params.reservationId;
+		let conditions = {reservationId: reservationId};
+		let update = {
+			$set : {
+				status: "CANCELLED"
+		  }
+		};
+		let options = { multi: true, upsert: true };
+		const cancelReservation = await Reservation.updateMany(
+			conditions, update, options)
+		console.log(cancelReservation);
+
+		return res.status(200).send({
+			cancelReservation: cancelReservation
+		});
+
+		} catch (err) {
+			console.error(err);
+		}
+
+	}
 }

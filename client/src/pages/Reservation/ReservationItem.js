@@ -9,12 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-
-
-import {
-  faEllipsisH,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 import "./reservation.css";
 import { KeyboardDatePicker , MuiPickersUtilsProvider} from "@material-ui/pickers";
@@ -92,7 +87,7 @@ export default function ReservationItem ({item}) {
         
           </Modal.Body>
           <Modal.Footer>
-          <Button variant="contained" color="primary"  onClick={handleClose}>Confirm</Button>
+          <Button variant="contained" color="primary"  onClick={closeCancelModal}>Confirm</Button>
           <Button onClick={closeCancelModal} autoFocus>
             Close
           </Button>
@@ -146,6 +141,17 @@ export default function ReservationItem ({item}) {
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
+                <Grid item style = {{marginBottom:20}}>
+                  <TextField
+  
+                    id="guest"
+                    name="guest"
+                    label="Number of Guests"
+                    type="number"
+                    fullWidth ="auto"
+                  
+  
+                  />
   
                 <Grid item style = {{marginBottom:20}}>
                   <TextField
@@ -158,16 +164,7 @@ export default function ReservationItem ({item}) {
   
                   />
                 </Grid>
-                <Grid item style = {{marginBottom:20}}>
-                  <TextField
-  
-                    id="guest"
-                    name="guest"
-                    label="Number of Guests"
-                    type="number"
-                  
-  
-                  />
+               
                 </Grid>
                 <Grid item style = {{marginBottom:20}}>
                 

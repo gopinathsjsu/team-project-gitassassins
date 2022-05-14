@@ -10,6 +10,7 @@ reservationController.get("/reservation/hotel/fetchActive/:hotelId", reservation
 reservationController.get("/reservation/customer/fetchAll/:customerId", reservationService.fetchAllReservationsByCustomer);
 reservationController.get("/reservation/customer/fetchActive/:customerId", reservationService.fetchActiveReservationByCustomer);
 reservationController.put("/reservation/customer/update/:customerId/:reservationId", reservationService.updateReservation);
+reservationController.put("/reservation/customer/cancel/:customerId/:reservationId", reservationService.cancelReservation);
 
 
 
