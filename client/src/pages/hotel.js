@@ -115,9 +115,8 @@ class hotel extends Component {
 							<ReservationDialogue hotelId={_id} />
 						</Grid>
 					</Grid>
-
 					<Grid direction="row" container item>
-						{this.displayRooms()}
+						{this.props.hotel.roomSearch && this.displayRooms()}
 					</Grid>
 				</Grid>
 			);

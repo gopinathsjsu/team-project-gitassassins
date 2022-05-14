@@ -73,7 +73,6 @@ class home extends Component {
 
 	render() {
 		const { classes } = this.props;
-
 		return (
 			<Grid direction="row" container className={classes.main}>
 				<Grid container item sm={12}>

@@ -21,7 +21,6 @@ const styles = (theme) => ({
         fontSize : '18px',
         fontWeight : '700',
         color : 'black',
-        overflow: 'hidden',
         maxHeight: '20px',
         maxWidth: '300px',
         paddingLeft : '10px'
@@ -34,8 +33,8 @@ const styles = (theme) => ({
         marginTop : '30px',
     },
     image : {
-        width : '300px',
-        height : '140px',
+        width : '350px',
+        height : '190px',
         backgroundSize: 'cover',
         objectFit : 'cover',
         resize: 'both',
@@ -59,10 +58,9 @@ class HotelCard extends Component {
         const { _id, hotelName, photoUrl , hotelAddress} = this.props.hotel
 
         return (
-            <MuiLink component = {Link} to ={ `/hotel/get/${_id}`} className={classes.link} > 
-                <Grid container className={classes.card}>
+            <Grid item container xs ={4} >
+                <MuiLink component = {Link} to ={ `/hotel/get/${_id}`} className={classes.link}  > 
                     <Grid container item xs={12}>
-                        {/* <CardMedia component="img" height="140" image={photoUrl}  /> */}
                         <div className={classes.image} style={{backgroundImage: `url(${photoUrl})`}}>
                         </div>
                     </Grid>
@@ -73,8 +71,8 @@ class HotelCard extends Component {
                     <Grid container item xs={12} className={classes.address}>
                         {hotelAddress.street}, {hotelAddress.city}, {hotelAddress.state} {hotelAddress.zipcode}
                     </Grid>
-                </Grid>     
-            </MuiLink>
+                </MuiLink>
+            </Grid>     
         )
     }
 }

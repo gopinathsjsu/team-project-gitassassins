@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'    
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
-// import Typography from '@material-ui/core/Typography'
-import { Button } from '@material-ui/core'
-// import { Link } from 'react-router-dom'
+import Typography from '@material-ui/core/Typography'
+import { Link } from 'react-router-dom'
 
 //redux
-// import {connect} from 'react-redux'
-// import {loginUser} from '../redux/actions/userActions'
+import {connect} from 'react-redux'
+import axios from 'axios'
+import { LOGIN_USER } from '../redux/types'
+import store from '../redux/store'
 
 const styles = (theme) => ({
     ...theme.spread,
@@ -34,17 +35,25 @@ const styles = (theme) => ({
     textField : {
         marginTop : '10px',
     },
-    submit : {
-        marginTop : '10px',
-        backgroundColor : '#7db5e3',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    },
     text3 : {
         marginTop : '10px'
     },
     errors : {
         fontSize : '14px',
         color : "red"
+    },
+    button : {
+        padding : '10px 190px',
+        cursor : 'pointer',
+        color : 'white',
+        marginTop : '20px',
+        marginBottom : '40px',
+        textTransform : 'capitalize',
+        fontFamily: 'Bebas Neue',
+        fontWeight : '600',
+        fontSize : '20px',
+        backgroundColor : 'black',
+        borderRadius : '10px'
     }
 })
 
@@ -63,11 +72,19 @@ class login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        // var newUser = {
-        //     email : this.state.email,
-        //     password : this.state.password
-        // }
-        // this.props.loginUser(newUser, this.props.history)
+        let email = this.state.email
+        let password = this.state.password
+        
+        axios.get(`/customer/login?email=${email}&password=${password}`)
+            .then(res => {
+                console.log('login customer'+JSON.stringify(res.data))
+                store.dispatch({
+                    type : LOGIN_USER,
+                    payload : res.data
+                })
+
+                this.props.history.push('/')
+        })
     }
 
     render() {
@@ -109,23 +126,24 @@ class login extends Component {
                             onChange= {this.handleChange} fullWidth 
                         />
 
-                        <Button type="submit" variant="contained" fullWidth className={classes.submit} >
-                            Login
-                        </Button>
-                        <br/>
-                        
+                        <div role="button" onClick={this.handleSubmit} className={classes.button}>
+                            <Link to="/" style={{textDecoration: 'none'}}>
+                                <div className={classes.checkout}  style={{color: 'white'}}>Login</div>
+                            </Link>
+                        </div>
+
                         {/* <Typography className={classes.errors}>
                             {this.props.errors.loginError ? this.props.errors.loginError : ''}
-                        </Typography>
+                        </Typography> */}
 
                         <Typography type="submit" className={classes.text3}>
                             <span className={classes.new} >
-                                New to Uber Eats? 
+                                New to Marriot hotels? 
                             </span>
                             <Typography className={classes.create} component = {Link} to="/signup" >
                                 Create an account
                             </Typography>
-                        </Typography> */}
+                        </Typography>
 
                     </form>
                 </Grid>
@@ -137,9 +155,8 @@ class login extends Component {
     }
 }
 
-// const mapStateToProps = (state) => ({
-//     user : state.user,
-//     errors : state.errors
-// })
-// export default connect(mapStateToProps, {loginUser} )(withStyles(styles)(login))
-export default (withStyles(styles)(login))
+const mapStateToProps = (state) => ({
+    user : state.user,
+})
+
+export default connect(mapStateToProps, {} )(withStyles(styles)(login))

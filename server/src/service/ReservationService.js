@@ -207,7 +207,9 @@ export class ReservationService {
 
 	cancelReservation = async(req, res) => {
 		try{
+			
 		const reservationId = req.params.reservationId;
+		console.log("Request Reached", reservationId);
 		let conditions = {reservationId: reservationId};
 		let update = {
 			$set : {
