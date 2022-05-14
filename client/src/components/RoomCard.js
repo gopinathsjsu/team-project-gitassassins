@@ -11,6 +11,7 @@ import {connect} from 'react-redux'
 import {  SET_SELECTED_ROOM } from '../redux/types'
 import store from '../redux/store'
 import { Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 const styles = (theme) => ({
     ...theme.spread,
@@ -81,7 +82,8 @@ const styles = (theme) => ({
         fontFamily: 'Bebas Neue',
         fontWeight : '600',
         fontSize : '20px',
-        backgroundColor : 'black'
+        backgroundColor : 'black',
+        borderRadius : '10px'
     }
 })
 
@@ -123,6 +125,10 @@ class RoomCard extends Component {
         })
 
         this.handleOpen()
+    }
+
+    handleBookRoom = () => {
+        console.log("handleBookRoom")
     }
 
     render(){
@@ -195,7 +201,7 @@ class RoomCard extends Component {
                         </Grid>
                         <hr style={{color: '#d6d6d6'}}/>
                         <Grid container direction="row" item>
-                        <Grid item xs={6} className={classes.rate} style={{fontSize : '15px'}}>
+                            <Grid item xs={6} className={classes.rate} style={{fontSize : '15px'}}>
                                 Room rate
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '15px'}}>
@@ -230,9 +236,11 @@ class RoomCard extends Component {
 
                     <Grid container xs={12} justifyContent="center" >
                         <Grid item>
-                            <Button onClick={this.handleBookRoom} variant="contained" className={classes.button} >
-                                Book room
-                            </Button>
+                            <div role="button" onClick={this.handleBookRoom} className={classes.button}>
+                                <Link to="/checkout" style={{textDecoration: 'none'}}>
+                                    <div className={classes.checkout}  style={{color: 'white'}}>Book room</div>
+                                </Link>
+                            </div>
                         </Grid>
                     </Grid>
 
