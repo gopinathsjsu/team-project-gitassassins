@@ -4,7 +4,6 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    CircularProgress,
     Typography,
     makeStyles,
     Divider,
@@ -16,7 +15,9 @@ import {
     FormControl,
     FormControlLabel,
     Checkbox,
-    InputLabel
+    InputLabel,
+    Select,
+    MenuItem
   } from "@material-ui/core";
   import {
     Apartment as HotelIcon,
@@ -28,9 +29,10 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 
 
-
+import "./reservation.css";
 import Rooms from './Rooms'
-import { ListItemButton } from '@mui/material';
+import { Alert, ListItemButton } from '@mui/material';
+import { Dropdown } from 'bootstrap';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -97,6 +99,7 @@ export default function Reservations() {
 
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
+  const customerId = "626e4ef69f02707335d0c4d2";
 
 
 //   const [checked, setChecked] = React.useState(Object.values(item.amenities));
@@ -148,8 +151,24 @@ export default function Reservations() {
       });
     }, [])
 
+
   
-    const cancelModal = () => {
+    const cancelReservation = (reservationId) =>
+    {
+        console.log(reservationId);
+        axios.put(`http://localhost:3001/reservation/customer/cancel/${reservationId}`)
+      .then(response => {
+        console.log("Reservation Cancel Response", response.data);
+        <Alert>Reservation Successfully Cancelled! Refund initiated.</Alert>
+      })
+      .catch(err => {
+        if (err.response && err.response.data) {
+          console.log("Error", err.response);
+        }
+      });
+
+    }
+    const cancelModal = (reservationId) => {
 
       return (
   
@@ -164,7 +183,9 @@ export default function Reservations() {
         
           </Modal.Body>
           <Modal.Footer>
-          <Button variant="contained" color="primary"  onClick={closeCancelModal}>Confirm</Button>
+          <Button variant="contained" color="primary"  onClick={()=> {
+              cancelReservation(reservationId)
+          }}>Confirm</Button>
           <Button onClick={closeCancelModal} autoFocus>
             Close
           </Button>
@@ -257,6 +278,7 @@ export default function Reservations() {
      
                     }}>
                         <Grid item>
+                        
                         <TextField
         
                         id="room"
@@ -268,9 +290,27 @@ export default function Reservations() {
         
                         />
                     </Grid>
-                    
+                    <br/>
                     <Grid item >
-                    
+                    <InputLabel id="demo-simple-select-label">Room Type</InputLabel>
+
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        //value={age}
+                        label="Room Type"
+                        style ={{width: "220"}}
+                        //onChange={handleChange}
+                    >
+                        <MenuItem value={10}>SUITE</MenuItem>
+                        <MenuItem value={20}>SINGLE</MenuItem>
+                        <MenuItem value={30}>KING</MenuItem>
+                        <MenuItem value={30}>QUEEN</MenuItem>
+
+                    </Select>
+                    </Grid>
+                    {/* <Grid item >
+                     
                         <TextField
                         id="name-input"
                         name="type"
@@ -280,7 +320,7 @@ export default function Reservations() {
                         
 
                         />
-                    </Grid>
+                    </Grid> */}
 
                     <br/>
                     <Grid item >
@@ -422,7 +462,7 @@ export default function Reservations() {
 
                 </AccordionDetails>
               </Accordion>
-              {cancelModal()}
+              {cancelModal(key)}
           {updateModal(reservationByIds[key])}
               </>
               
