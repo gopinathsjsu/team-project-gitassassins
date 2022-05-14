@@ -30,6 +30,7 @@
 		"dayjs": "^1.11.2",
 		"jw-paginate": "^1.0.4",
 		"jw-react-pagination": "^1.1.0",
+		"moment": "^2.29.3",
 		"react": "^17.0.2",
 		"react-bootstrap": "^1.6.5",
 		"react-chartjs-2": "^4.0.0",
