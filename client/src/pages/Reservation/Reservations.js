@@ -156,7 +156,7 @@ export default function Reservations() {
     const cancelReservation = (reservationId) =>
     {
         console.log(reservationId);
-        axios.put(`http://localhost:3001/reservation/customer/cancel/${reservationId}`)
+        axios.put(`/reservation/customer/cancel/${reservationId}`)
       .then(response => {
         console.log("Reservation Cancel Response", response.data);
         <Alert>Reservation Successfully Cancelled! Refund initiated.</Alert>
