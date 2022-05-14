@@ -1,5 +1,6 @@
 import Room from "../model/Room.js";
 import Reservation from "../model/Reservation.js";
+import Holidays from "date-holidays";
 
 export class RoomService {
 	create = async (req, res) => {
@@ -201,6 +202,88 @@ export class RoomService {
 				"Number of SUITE rooms booked in that date range: ",
 				suiteRoomsBooked
 			);
+
+			const startDateObj = new Date(startDate);
+			const endDateObj = new Date(endDate);
+
+			let startDay = startDateObj.getUTCDay();
+			let endDay = endDateObj.getUTCDay();
+			let weekendSurging = false;
+			if (startDay == 0 || endDay == 0 || startDay == 6 || endDay == 6) {
+				weekendSurging = true;
+			}
+			// Saturday = 6, Sunday = 0
+
+			let holidays = new Holidays();
+			holidays.init("US", "CA");
+			let holidaySurging = false;
+			for (
+				let loopTime = startDate.getTime();
+				loopTime < endDate.getTime();
+				loopTime += 86400000
+			) {
+				let loopDay = new Date(loopTime);
+				if (holidays.isHoliday(loopDay)) {
+					console.log(loopDay);
+					holidaySurging = true;
+					break;
+				}
+			}
+
+			let totalSurging = 0;
+			if (holidaySurging == true) {
+				totalSurging += 25;
+				if (weekendSurging == true) {
+					totalSurging += 15;
+				}
+			}
+
+			if (totalSurging > 0) {
+				const availability = {
+					single: {
+						availableRooms: Math.abs(
+							singleRoom[0].totalCount - singleRoomsBooked
+						),
+						maximumOccupancy: singleRoom[0].maximumOccupancy,
+						price:
+							singleRoom[0].price +
+							(singleRoom[0].price * totalSurging) / 100,
+						photoUrl: singleRoom[0].photoUrl,
+					},
+					king: {
+						availableRooms: Math.abs(
+							kingRoom[0].totalCount - kingRoomsBooked
+						),
+						maximumOccupancy: kingRoom[0].maximumOccupancy,
+						price:
+							kingRoom[0].price +
+							(kingRoom[0].price * totalSurging) / 100,
+						photoUrl: kingRoom[0].photoUrl,
+					},
+					queen: {
+						availableRooms: Math.abs(
+							queenRoom[0].totalCount - queenRoomsBooked
+						),
+						maximumOccupancy: queenRoom[0].maximumOccupancy,
+						price:
+							queenRoom[0].price +
+							(queenRoom[0].price * totalSurging) / 100,
+						photoUrl: queenRoom[0].photoUrl,
+					},
+					suite: {
+						availableRooms: Math.abs(
+							suiteRoom[0].totalCount - suiteRoomsBooked
+						),
+						maximumOccupancy: suiteRoom[0].maximumOccupancy,
+						price:
+							suiteRoom[0].price +
+							(suiteRoom[0].price * totalSurging) / 100,
+						photoUrl: suiteRoom[0].photoUrl,
+					},
+				};
+
+				return res.status(200).send(availability);
+			}
 
 			const availability = {
 				single: {
