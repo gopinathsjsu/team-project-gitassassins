@@ -15,7 +15,7 @@ export default function Reservation() {
   useEffect(() => {
 
     //axios.get(`${endPointObj.url}/job-seeker/get-company-photos/${companyId}`)
-    axios.get("http://localhost:3001/reservation/customer/fetchAll/626e4ef69f02707335d0c4d2")
+    axios.get("/reservation/customer/fetchAll/626e4ef69f02707335d0c4d2")
       .then(response => {
         console.log("Reservations by customer", response.data);
         setReservations(response.data);
