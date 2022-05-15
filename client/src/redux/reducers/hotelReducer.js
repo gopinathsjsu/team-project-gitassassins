@@ -1,4 +1,4 @@
-import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH } from '../types'
+import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH, BREAKFAST, FITNESSROOM, POOL , PARKING, MEALS } from '../types'
   
   const initialState = {
     breakfastRate : 20,
@@ -12,6 +12,12 @@ import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH } from '../ty
     roomSearch : false,
     startDate : '',
     endDate : '',
+    breakfast : false,
+    fitnessRoom : false,
+    pool : false,
+    parking : false,
+    meals : false,
+
     availability : []
     // availability : [{
     //   type : 'single',
@@ -45,6 +51,35 @@ import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH } from '../ty
   
   export default function hotelReducer(state = initialState, action){
     switch(action.type){
+      case BREAKFAST:
+        return {
+          ...state,
+          breakfast : !state.breakfast,
+        }
+
+        case FITNESSROOM:
+        return {
+          ...state,
+          fitnessRoom : !state.fitnessRoom,
+        }
+
+        case POOL:
+        return {
+          ...state,
+          pool : !state.pool,
+        }
+
+        case PARKING:
+        return {
+          ...state,
+          parking : !state.parking,
+        }
+        case MEALS:
+        return {
+          ...state,
+          meals : !state.meals,
+        }
+
       case GET_ALL_HOTELS:
         return {
           ...state,
