@@ -1,22 +1,31 @@
-# team-project-gitassassins
-team-project-gitassassins created by GitHub Classroom
+# Team Name
+GitAssassins
 
-## Team Members
+## Team Members and Contributions
 
-# - Jaineil Mandavia (015924948)
-# - Jui Thombre (015257450)
-# - Ratika Bhuwalka (015721511)
-# - Vinti Jain (015955446)
+**- Jaineil Mandavia (015924948)**
+Backend, Frontend, Testing
 
-## SCRUM LINK: 
-# Weekly Scrum Task Board and Burndown Chart
+**- Jui Thombre (015257450)**
+Frontend, Backend, Testing
+
+**- Ratika Bhuwalka (015721511)**
+Backend, Frontend, Architecture
+
+**- Vinti Jain (015955446)**
+Architecture, Wireframing, Refactoring, Testing
+
+## SCRUM LINKS: 
+### GitHub Repo link:
+https://github.com/gopinathsjsu/team-project-gitassassins
+
+### Weekly Scrum Task Board and Burndown Chart
 https://docs.google.com/spreadsheets/d/1uIeno8bf9UtKi7ogyUhMuP5DvjrKRvEzg1yo4nI-VxI/edit?usp=sharing
 
-# Weekly Scrum Report and XP Core Values
-Communication and Simplicity
+### Weekly Scrum Report
 https://docs.google.com/document/d/1bk27Nhc9f9v79aHdvfNKA87wD9j6l1313c4kjVFFsLg/edit?usp=sharing
 
-*Technology Used -*
+## Technology Used -
 * Frontend - ReactJS
 * Backend - ExpressJS
 * Database - MongoDB
@@ -28,9 +37,7 @@ https://docs.google.com/document/d/1bk27Nhc9f9v79aHdvfNKA87wD9j6l1313c4kjVFFsLg/
    * Google Sheet - Tracking tasks and sprint burndown charts
    * Zoom - Team collaboration (Organizing daily scrum meetings)
 
-## UI Wireframes
-
-*Extreme programming (XP) Core Values Implemented*:
+## Extreme programming (XP) Core Values Implemented:
  * Communication
     * Communication was one of the key strengths of our team. Our team managed to meet every week on Tuesday and Friday for the scrum.
     * During the meeting, we discussed about individual progress, technical difficulties and we helped each other whenever there was a roadbloack. We ensured that there was knowledge transfer from one person to the rest of the team.
@@ -49,11 +56,10 @@ https://docs.google.com/document/d/1bk27Nhc9f9v79aHdvfNKA87wD9j6l1313c4kjVFFsLg/
        * During the development phase we pushed our changes to our particular branch and created pull requests. Once the code was approved by another team member, we pushed the changes to the master branch. We made sure the code changes on the master branch was always stable and did not break the other team member’s code.
        * Continuous feedback helped us in aligning our goals and responsibilities.
 
-
+## UI Wireframes
 
 ## Architecture Diagram
 ![144359709-189e1a2a-a3bd-4733-aeeb-665091971b74](https://user-images.githubusercontent.com/85063516/168495053-a19b6e65-0c10-4ca8-831a-f4c6ad9b84c2.png)
-
 
 ## Class Diagram
 ![Class Diagram0](https://user-images.githubusercontent.com/85063516/168495086-d97052fd-339e-43f6-b501-10d1a4438305.png)
