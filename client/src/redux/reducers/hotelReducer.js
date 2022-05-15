@@ -10,6 +10,8 @@ import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH } from '../ty
     selectedHotel : {},
     selectedRoom : '',
     roomSearch : false,
+    startDate : '',
+    endDate : '',
     availability : []
     // availability : [{
     //   type : 'single',
@@ -65,7 +67,9 @@ import { GET_ALL_HOTELS, GET_HOTEL, SET_SELECTED_ROOM, ROOM_SEARCH } from '../ty
         return {
           ...state,
           roomSearch : true,
-          availability : action.payload
+          availability : action.payload,
+          startDate : action.startDate,
+          endDate : action.endDate,
         }
 
       default : 
