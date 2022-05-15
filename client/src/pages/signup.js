@@ -176,9 +176,9 @@ class signup extends Component {
 
                         <Typography type="submit" className={classes.text3}>
                             <span className={classes.new} >
-                                Are you a admin?
+                                Are you an admin?
                             </span>
-                            <Typography className={classes.create} component = {Link} to="/adminSignup" >
+                            <Typography className={classes.create} component = {Link} to="/hotelSignup" >
                                 Create an account here
                             </Typography>
                         </Typography>

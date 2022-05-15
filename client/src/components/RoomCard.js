@@ -8,7 +8,8 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 
 import {connect} from 'react-redux'
-import {  SET_SELECTED_ROOM } from '../redux/types'
+import axios from "axios"
+import { SET_SELECTED_ROOM, GET_LOYALTY } from '../redux/types'
 import store from '../redux/store'
 import { Link } from 'react-router-dom'
 
@@ -98,6 +99,19 @@ class RoomCard extends Component {
         meals: false,
     }
 
+	fetchHotelDetails = async () => {
+		let userId = this.props.user.authenticatedUser._id;
+
+		//get data for specific hotel
+		await axios.get(`/customer/loyalty/${userId}`).then((res) => {
+			console.log("load loyalty" + JSON.stringify(res.data));
+			store.dispatch({
+				type: GET_LOYALTY,
+				payload: res.data,
+			});
+		});
+	};
+
     handleOpen = () => {
         this.setState({
             open : true
@@ -112,8 +126,9 @@ class RoomCard extends Component {
 
     handleChange = (event) => {
         this.setState({
-            [event.target.name] : event.target.value
+            [event.target.name] : event.target.value === "on" ? true : event.target.value === "true" ? false : true
         })
+        console.log(JSON.stringify(this.state))
     }
 
     handleOnClick = () => {
@@ -132,11 +147,19 @@ class RoomCard extends Component {
 
     render(){
         const { classes } = this.props
-        const { type, price, photoUrl, maxOccupancy} = this.props.room
-        let amenitiesRate = 100
-        let roomRate = 100
+        const { type, price, photoUrl, maximumOccupancy, availableRooms} = this.props.room
+        const { breakfastRate, fitnessRate, swimmingRate,parkingRate, mealRate} = this.props.hotel
+        const { rewardPoints, loyalty } = this.props.user.authenticatedUser
+        let amenitiesRate = this.state.breakfast && breakfastRate ? breakfastRate : 0 
+         + this.state.fitnessRoom && fitnessRate ? fitnessRate : 0 
+         + this.state.pool && swimmingRate  ? swimmingRate : 0 
+         + this.state.parking && parkingRate  ? parkingRate : 0 
+         + this.state.meals && mealRate ? mealRate : 0 
+        // console.log("amenitiesRate "+amenitiesRate)
+
+        let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty 
+        console.log(loyaltyPoints+" loyal")
         return (
-            
             <Grid container item xs={3} className={classes.card} >
                 <div onClick={this.handleOnClick}>
                     <Grid container item className={classes.tile} style={{backgroundColor: type === this.props.hotel.selectedRoom ? '#e6e6e6' : '', border: type === this.props.hotel.selectedRoom ? '1px solid #383838' : ''}}>
@@ -148,8 +171,12 @@ class RoomCard extends Component {
                         <Grid container item xs={12} className={classes.price}>
                             ${price} per night
                         </Grid>
+                        <Grid container item xs={12} className={classes.availableRooms}>
+                            {availableRooms} rooms available
+                        </Grid>
                     </Grid>   
                 </div>
+                {this.fetchLoyaltyDetails}
 
                 <Dialog open={this.state.open} onClose={this.handleClose} fullWidth maxWidth="md">  
 
@@ -168,10 +195,10 @@ class RoomCard extends Component {
                             style={{marginBottom: '10px'}} value={this.state.numGuests} variant="outlined"  className={classes.input} />
                         </Grid>
 
-                        {this.state.numGuests/this.state.numRooms > maxOccupancy ? 
+                        {this.state.numGuests/this.state.numRooms > maximumOccupancy ? 
                         (
                             <Grid item xs={12} style={{color : 'red', marginLeft : '10px', marginBottom : '30px'}}>
-                                Max occupancy for the {type} room is {maxOccupancy}
+                                Max occupancy for the {type} room is {maximumOccupancy}
                             </Grid>
                         ) : '' }
                         
@@ -211,31 +238,47 @@ class RoomCard extends Component {
                                 Room rate
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '15px'}}>
-                                ${roomRate}
+                                ${price}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '15px', borderBottom : '1px solid #d6d6d6'}}>
                                 Amenities
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '15px', borderBottom : '1px solid #d6d6d6'}}>
-                                ${amenitiesRate }
+                                ${this.state.breakfast && breakfastRate ? breakfastRate : 0 
+         + this.state.fitnessRoom && fitnessRate ? fitnessRate : 0 
+         + this.state.pool && swimmingRate  ? swimmingRate : 0 
+         + this.state.parking && parkingRate  ? parkingRate : 0 
+         + this.state.meals && mealRate ? mealRate : 0  }
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '16px', fontWeight : '600'}}>
                                 Total cash rate
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '16px', fontWeight : '600'}}>
-                                ${Math.round((roomRate + amenitiesRate))}
+                                ${Math.round((price + amenitiesRate))}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '16px', fontWeight : '600', borderBottom : '1px solid #d6d6d6'}}>
                                 Estimated government taxes and fees
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '16px', fontWeight : '600', borderBottom : '1px solid #d6d6d6'}}>
-                                ${Math.round((roomRate + amenitiesRate) * 0.2)}
+                                ${Math.round((price + amenitiesRate) * 0.2)}
+                            </Grid>
+                            <Grid item xs={6} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', color: '#bf2e45'}}>
+                                Reward Points ({rewardPoints} points)
+                            </Grid>
+                            <Grid item xs={4} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', color: '#bf2e45'}}>
+                                -${Math.round(rewardPoints/10)}
+                            </Grid>
+                            <Grid item xs={6} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', borderBottom : '1px solid #d6d6d6', color: '#bf2e45'}}>
+                                Loyalty Points ({loyaltyPoints} points)
+                            </Grid>
+                            <Grid item xs={4} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', borderBottom : '1px solid #d6d6d6', color: '#bf2e45'}}>
+                                -${Math.round(parseInt(loyaltyPoints))}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '19px', fontWeight : '700'}}>
                                 Total Stay
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '19px', fontWeight : '700', marginBottom : '30px'}}>
-                                ${Math.round((roomRate + amenitiesRate) * 1.2)}
+                                ${Math.round(((price + amenitiesRate) * 1.2) - rewardPoints/10 - loyaltyPoints)}
                             </Grid>
                         </Grid>
                     </Grid>

@@ -26,6 +26,7 @@ const styles = (theme) => ({
 		flexGrow: 1,
 		fontFamily: "Bebas Neue",
 		fontWeight: "600",
+        cursor :'pointer',
 		"&:hover": {
 			textDecoration: "none",
 		},
@@ -92,7 +93,7 @@ class NavigationBar extends Component {
                     <Toolbar style={{ height: 50}}>
 
                         <MuiLink component = {Link} to ={ `/`} className={classes.title}>
-                            <span style={{color : '#162328'}}>Express Inn Hotels</span> 
+                            <span style={{color : '#162328'}}>Premier Inn Hotels</span> 
                         </MuiLink>
 
                         <Button
@@ -124,13 +125,22 @@ class NavigationBar extends Component {
                         )}                      
 
                         {authenticated && ( 
+                            <Tooltip title="Reservation" >
+                                <Button component = {Link} to="/reservations" >
+                                    Reservations
+                                </Button>
+                            </Tooltip>
+                        )}  
+
+                        {authenticated && ( 
                             <Tooltip title="Profile" >
                                 <Button component = {Link} to="/" >
                                     <Avatar>{authenticatedUser.firstName.substring(0,1)}{authenticatedUser.lastName.substring(0,1)}</Avatar>
                                 </Button>
                             </Tooltip>
                         )}    
-                                  
+
+                              
                     </Toolbar>
                 </AppBar>
             </div>

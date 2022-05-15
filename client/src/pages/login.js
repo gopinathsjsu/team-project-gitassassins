@@ -72,10 +72,12 @@ class login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        let email = this.state.email
-        let password = this.state.password
-        
-        axios.get(`/customer/login?email=${email}&password=${password}`)
+        var newUser = {
+            email : this.state.email,
+            password : this.state.password
+        }
+
+        axios.post(`/customer/login`, newUser)
             .then(res => {
                 console.log('login customer'+JSON.stringify(res.data))
                 store.dispatch({
@@ -127,9 +129,9 @@ class login extends Component {
                         />
 
                         <div role="button" onClick={this.handleSubmit} className={classes.button}>
-                            <Link to="/" style={{textDecoration: 'none'}}>
+                            {/* <Link to="/" style={{textDecoration: 'none'}}> */}
                                 <div className={classes.checkout}  style={{color: 'white'}}>Login</div>
-                            </Link>
+                            {/* </Link> */}
                         </div>
 
                         {/* <Typography className={classes.errors}>
@@ -142,6 +144,15 @@ class login extends Component {
                             </span>
                             <Typography className={classes.create} component = {Link} to="/signup" >
                                 Create an account
+                            </Typography>
+                        </Typography>
+
+                        <Typography type="submit" className={classes.text3}>
+                            <span className={classes.new} >
+                                Are you an admin?
+                            </span>
+                            <Typography className={classes.create} component = {Link} to="/hotelLogin" >
+                                Login here
                             </Typography>
                         </Typography>
 
