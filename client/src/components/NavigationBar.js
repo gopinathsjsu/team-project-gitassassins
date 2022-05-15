@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
-import withStyles from '@material-ui/core/styles/withStyles'
-import MuiLink from '@material-ui/core/Link'
-import SearchIcon from '@material-ui/icons/Search'
-import InputBase from '@material-ui/core/InputBase'
-import Avatar from '@material-ui/core/Avatar'
-import Tooltip from '@material-ui/core/Tooltip'
-import { Link } from 'react-router-dom'
+import React, { Component } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import withStyles from "@material-ui/core/styles/withStyles";
+import MuiLink from "@material-ui/core/Link";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
+import Avatar from "@material-ui/core/Avatar";
+import Tooltip from "@material-ui/core/Tooltip";
+import { Link } from "react-router-dom";
 
-import {connect} from 'react-redux'
-import store from '../redux/store'
-import {LOCATION_FILTER} from '../redux/types'
+import { connect } from "react-redux";
+import store from "../redux/store";
+import { LOCATION_FILTER } from "../redux/types";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -68,47 +68,76 @@ const styles = (theme) => ({
 });
 
 class NavigationBar extends Component {
+	state = {
+		location: "",
+	};
 
-    state = {
-        location : ''
-    }
+	handleChange = (event) => {
+		this.setState({
+			[event.target.name]: event.target.value,
+		});
 
-    handleChange = (event) => {
-        this.setState({
-            [event.target.name] : event.target.value 
-        })
+		store.dispatch({
+			type: LOCATION_FILTER,
+			payload: this.state.location,
+		});
+	};
 
-        store.dispatch({
-            type : LOCATION_FILTER,
-            payload : this.state.location
-        })
-    }
+	render() {
+		const { classes } = this.props;
+		const { authenticated, authenticatedUser } = this.props.user;
+		return (
+			<div>
+				<AppBar
+					position="relative"
+					color="transparent"
+					className={classes.appbar}
+				>
+					<Toolbar style={{ height: 50 }}>
+						<MuiLink
+							component={Link}
+							to={`/`}
+							className={classes.title}
+						>
+							<span style={{ color: "#162328" }}>
+								Premier Inn Hotels
+							</span>
+						</MuiLink>
 
-    render(){
-        const { classes } = this.props
-        const { authenticated, authenticatedUser } = this.props.user
-        return (
-            <div >
-                <AppBar position="relative" color="transparent" className={classes.appbar} >
-                    <Toolbar style={{ height: 50}}>
+						<Button name="dummy" className={classes.dummy} />
 
-                        <MuiLink component = {Link} to ={ `/`} className={classes.title}>
-                            <span style={{color : '#162328'}}>Premier Inn Hotels</span> 
-                        </MuiLink>
+						<InputBase
+							id="location"
+							name="location"
+							className={classes.location}
+							placeholder="Enter a location"
+							onChange={this.handleChange}
+							startAdornment={
+								<SearchIcon style={{ color: "#2b2b2b" }} />
+							}
+						/>
 
-                        <Button
-                            name="dummy"
-                            className={classes.dummy}
-                        />
+						{/* signup */}
+						{!authenticated && (
+							<Button
+								className={classes.button}
+								component={Link}
+								to="/signup"
+							>
+								Signup
+							</Button>
+						)}
 
-                        <InputBase
-                            id="location"
-                            name="location"
-                            className={classes.location}
-                            placeholder="Enter a location"
-                            onChange={this.handleChange}
-                            startAdornment={<SearchIcon style={{color : '#2b2b2b'}} />}
-                        />
+						{/* login */}
+						{!authenticated && (
+							<Button
+								className={classes.button}
+								component={Link}
+								to="/login"
+							>
+								Login
+							</Button>
+						)}
 
                         {/* signup */}  
                         {!authenticated && (                                          
@@ -146,6 +175,7 @@ class NavigationBar extends Component {
             </div>
         )
     }
+
 }
 
 const mapStateToProps = (state) => ({

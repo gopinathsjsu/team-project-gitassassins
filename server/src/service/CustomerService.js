@@ -10,7 +10,6 @@ export class CustomerService {
 				lastName: req.body.lastName,
 				email: req.body.email,
 				password: req.body.password,
-				address: req.body.address,
 			});
 
 			const response = await newCustomer.save();

@@ -3,23 +3,37 @@ import Reservation from "../model/Reservation.js";
 import Holidays from "date-holidays";
 
 export class RoomService {
-	create = async (req, res) => {
+	// create = async (req, res) => {
+	// 	try {
+	// 		console.log(req.body);
+
+	// 		const newRoom = new Room({
+	// 			hotelId: req.body.hotelId,
+	// 			type: req.body.type, // "SUITE", "SINGLE", "KING", "QUEEN"
+	// 			price: req.body.price,
+	// 			totalCount: req.body.totalCount,
+	// 			maximumOccupancy: req.body.maximumOccupancy,
+	// 			photoUrl: req.body.photoUrl ? req.body.photoUrl : null,
+	// 		});
+
+	// 		const response = await newRoom.save();
+	// 		res.status(200).send(response);
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// };
+
+	getRoomByTypeForAdmin = async (req, res) => {
+		const hotelId = req.params.hotelId;
+		const type = req.params.type;
+		console.log(hotelId, type);
 		try {
-			console.log(req.body);
-
-			const newRoom = new Room({
-				hotelId: req.body.hotelId,
-				type: req.body.type, // "SUITE", "SINGLE", "KING", "QUEEN"
-				price: req.body.price,
-				totalCount: req.body.totalCount,
-				maximumOccupancy: req.body.maximumOccupancy,
-				photoUrl: req.body.photoUrl ? req.body.photoUrl : null,
-			});
-
-			const response = await newRoom.save();
+			const response = await Room.find({ hotelId: hotelId, type: type });
+			console.log(response);
 			res.status(200).send(response);
 		} catch (err) {
 			console.error(err);
+			res.status(500).send("Could not fetch room details");
 		}
 	};
 
@@ -233,92 +247,105 @@ export class RoomService {
 			let totalSurging = 0;
 			if (holidaySurging == true) {
 				totalSurging += 25;
-				if (weekendSurging == true) {
-					totalSurging += 15;
-				}
 			}
+			if (weekendSurging == true) {
+				totalSurging += 15;
+			}
+
+			let availability = [];
 
 			if (totalSurging > 0) {
-				const availability = {
-					single: {
-						availableRooms: Math.abs(
-							singleRoom[0].totalCount - singleRoomsBooked
-						),
-						maximumOccupancy: singleRoom[0].maximumOccupancy,
-						price:
-							singleRoom[0].price +
-							(singleRoom[0].price * totalSurging) / 100,
-						photoUrl: singleRoom[0].photoUrl,
-					},
-					king: {
-						availableRooms: Math.abs(
-							kingRoom[0].totalCount - kingRoomsBooked
-						),
-						maximumOccupancy: kingRoom[0].maximumOccupancy,
-						price:
-							kingRoom[0].price +
-							(kingRoom[0].price * totalSurging) / 100,
-						photoUrl: kingRoom[0].photoUrl,
-					},
-					queen: {
-						availableRooms: Math.abs(
-							queenRoom[0].totalCount - queenRoomsBooked
-						),
-						maximumOccupancy: queenRoom[0].maximumOccupancy,
-						price:
-							queenRoom[0].price +
-							(queenRoom[0].price * totalSurging) / 100,
-						photoUrl: queenRoom[0].photoUrl,
-					},
-					suite: {
-						availableRooms: Math.abs(
-							suiteRoom[0].totalCount - suiteRoomsBooked
-						),
-						maximumOccupancy: suiteRoom[0].maximumOccupancy,
-						price:
-							suiteRoom[0].price +
-							(suiteRoom[0].price * totalSurging) / 100,
-						photoUrl: suiteRoom[0].photoUrl,
-					},
-				};
-
-				return res.status(200).send(availability);
-			}
-
-			const availability = {
-				single: {
+				const single = {
+					type: "SINGLE",
 					availableRooms: Math.abs(
 						singleRoom[0].totalCount - singleRoomsBooked
 					),
 					maximumOccupancy: singleRoom[0].maximumOccupancy,
-					price: singleRoom[0].price,
+					price:
+						singleRoom[0].price +
+						(singleRoom[0].price * totalSurging) / 100,
 					photoUrl: singleRoom[0].photoUrl,
-				},
-				king: {
+				};
+				availability.push(single);
+				const king = {
+					type: "KING",
 					availableRooms: Math.abs(
 						kingRoom[0].totalCount - kingRoomsBooked
 					),
 					maximumOccupancy: kingRoom[0].maximumOccupancy,
-					price: kingRoom[0].price,
+					price:
+						kingRoom[0].price +
+						(kingRoom[0].price * totalSurging) / 100,
 					photoUrl: kingRoom[0].photoUrl,
-				},
-				queen: {
+				};
+				availability.push(king);
+				const queen = {
+					type: "QUEEN",
 					availableRooms: Math.abs(
 						queenRoom[0].totalCount - queenRoomsBooked
 					),
 					maximumOccupancy: queenRoom[0].maximumOccupancy,
-					price: queenRoom[0].price,
+					price:
+						queenRoom[0].price +
+						(queenRoom[0].price * totalSurging) / 100,
 					photoUrl: queenRoom[0].photoUrl,
-				},
-				suite: {
+				};
+				availability.push(queen);
+				const suite = {
+					type: "SUITE",
 					availableRooms: Math.abs(
 						suiteRoom[0].totalCount - suiteRoomsBooked
 					),
 					maximumOccupancy: suiteRoom[0].maximumOccupancy,
-					price: suiteRoom[0].price,
+					price:
+						suiteRoom[0].price +
+						(suiteRoom[0].price * totalSurging) / 100,
 					photoUrl: suiteRoom[0].photoUrl,
-				},
+				};
+				availability.push(suite);
+				return res.status(200).send(availability);
+			}
+
+			const single = {
+				type: "SINGLE",
+				availableRooms: Math.abs(
+					singleRoom[0].totalCount - singleRoomsBooked
+				),
+				maximumOccupancy: singleRoom[0].maximumOccupancy,
+				price: singleRoom[0].price,
+				photoUrl: singleRoom[0].photoUrl,
 			};
+			availability.push(single);
+			const king = {
+				type: "KING",
+				availableRooms: Math.abs(
+					kingRoom[0].totalCount - kingRoomsBooked
+				),
+				maximumOccupancy: kingRoom[0].maximumOccupancy,
+				price: kingRoom[0].price,
+				photoUrl: kingRoom[0].photoUrl,
+			};
+			availability.push(king);
+			const queen = {
+				type: "QUEEN",
+				availableRooms: Math.abs(
+					queenRoom[0].totalCount - queenRoomsBooked
+				),
+				maximumOccupancy: queenRoom[0].maximumOccupancy,
+				price: queenRoom[0].price,
+				photoUrl: queenRoom[0].photoUrl,
+			};
+			availability.push(queen);
+			const suite = {
+				type: "SUITE",
+				availableRooms: Math.abs(
+					suiteRoom[0].totalCount - suiteRoomsBooked
+				),
+				maximumOccupancy: suiteRoom[0].maximumOccupancy,
+				price: suiteRoom[0].price,
+				photoUrl: suiteRoom[0].photoUrl,
+			};
+			availability.push(suite);
 
 			return res.status(200).send(availability);
 		} catch (err) {
