@@ -207,11 +207,11 @@ class RoomCard extends Component {
 					numberOfRooms : this.state.numRooms,
 					totalBill : totalStay,
 					amenities : {
-						breakfast : this.state.breakfast,
-						fitnessRoom: this.state.fitnessRoom,
-						pool: this.state.pool,
-						parking: this.state.parking,
-						meals: this.state.meals,
+						breakfast : this.props.hotel.breakfast,
+						fitnessRoom: this.props.hotel.fitnessRoom,
+						pool: this.props.hotel.pool,
+						parking: this.props.hotel.parking,
+						meals: this.props.hotel.meals,
 					}
 				}
 			]
