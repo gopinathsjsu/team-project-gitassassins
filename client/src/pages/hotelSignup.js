@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
-// import Typography from '@material-ui/core/Typography'
 import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
-// import { Link } from 'react-router-dom'
-
-//redux
-// import {connect} from 'react-redux'
-// import {signupUser} from '../redux/actions/userActions'
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -19,13 +14,6 @@ const styles = (theme) => ({
 	},
 	textField: {
 		marginTop: "10px",
-		marginRight: "15px",
-	},
-	submit: {
-		marginTop: "10px",
-		backgroundColor: "#7db5e3",
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
 	},
 	create: {
 		color: "#3FC060",
@@ -44,8 +32,18 @@ const styles = (theme) => ({
 		fontSize: "14px",
 		color: "red",
 	},
-	div: {
-		marginBottom: "20px",
+	button: {
+		padding: "10px 190px",
+		cursor: "pointer",
+		color: "white",
+		marginTop: "20px",
+		marginBottom: "40px",
+		textTransform: "capitalize",
+		fontFamily: "Bebas Neue",
+		fontWeight: "600",
+		fontSize: "20px",
+		backgroundColor: "black",
+		borderRadius: "10px",
 	},
 });
 
@@ -71,12 +69,12 @@ class hotelSignup extends Component {
 		});
 	};
 
-	handleSubmit = (event) => {
+	handleSubmit = async (event) => {
 		event.preventDefault();
-		var newHotel = {
+		const payload = {
 			hotelName: this.state.hotelName,
-			email: this.state.email,
-			password: this.state.password,
+			adminEmail: this.state.email,
+			adminPassword: this.state.password,
 			address: {
 				street: this.state.street,
 				city: this.state.city,
@@ -91,7 +89,7 @@ class hotelSignup extends Component {
 				mealsCost: this.state.mealsCost,
 			},
 		};
-		// this.props.signupUser(newUser, this.props.history)
+		await axios.post(`/hotel/create`, payload);
 	};
 
 	render() {
@@ -108,7 +106,7 @@ class hotelSignup extends Component {
 					<form noValidate onSubmit={this.handleSubmit}>
 						<TextField
 							id="hotelName"
-							name="hotelname"
+							name="hotelName"
 							placeholder="Hotel Name"
 							type="text"
 							className={classes.textField}
@@ -121,7 +119,7 @@ class hotelSignup extends Component {
 						<TextField
 							id="email"
 							name="email"
-							placeholder="Email"
+							placeholder="Hotel admin email"
 							type="email"
 							className={classes.textField}
 							variant="outlined"
@@ -133,7 +131,7 @@ class hotelSignup extends Component {
 						<TextField
 							id="password"
 							name="password"
-							placeholder="Password"
+							placeholder="Hotel admin password"
 							type="password"
 							className={classes.textField}
 							variant="outlined"
@@ -243,51 +241,27 @@ class hotelSignup extends Component {
 							fullWidth
 							color="secondary"
 						/>
-						<TextField
-							id="mealsCost"
-							name="mealsCost"
-							placeholder="Meals Cost ($)"
-							type="number"
-							className={classes.textField}
-							variant="outlined"
-							value={this.state.mealsCost}
-							onChange={this.handleChange}
-							fullWidth
-							color="secondary"
-						/>
-						<Button
-							type="submit"
-							variant="contained"
-							fullWidth
-							className={classes.submit}
+						<div
+							role="button"
+							onClick={this.handleSubmit}
+							className={classes.button}
 						>
-							Signup
-						</Button>
+							<Link
+								to="/hotelLogin"
+								style={{ textDecoration: "none" }}
+							>
+								<div
+									className={classes.checkout}
+									style={{ color: "white" }}
+								>
+									Signup
+								</div>
+							</Link>
+						</div>
 
 						<div>
 							<br />
 						</div>
-						{/* <Typography className={classes.errors}>
-                            {this.props.errors.signupError ? this.props.errors.signupError : ''}
-                        </Typography>
-
-                        <Typography type="submit" className={classes.text3}>
-                            <span className={classes.new} >
-                                Already a member? 
-                            </span>
-                            <Typography className={classes.create} component = {Link} to="/login" >
-                                Login here
-                            </Typography>
-                        </Typography>
-
-                        <Typography type="submit" className={classes.text3}>
-                            <span className={classes.new} >
-                                Are you a restaurant?
-                            </span>
-                            <Typography className={classes.create} component = {Link} to="/restaurantSignup" >
-                                Create an account here
-                            </Typography>
-                        </Typography> */}
 					</form>
 				</Grid>
 
@@ -297,9 +271,4 @@ class hotelSignup extends Component {
 	}
 }
 
-// const mapStateToProps = (state) => ({
-//     user : state.user,
-//     errors : state.errors
-// })
-// export default connect(mapStateToProps, {signupUser} )(withStyles(styles)(signup))
 export default withStyles(styles)(hotelSignup);
