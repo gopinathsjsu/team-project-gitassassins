@@ -8,8 +8,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+
 
 import "./reservation.css";
 import { KeyboardDatePicker , MuiPickersUtilsProvider} from "@material-ui/pickers";
@@ -249,16 +248,7 @@ export default function ReservationItem ({item}) {
         </p>
       </div>
       <div>
-        <FontAwesomeIcon
-          style={{
-            zIndex: 1,
-            transitionDelay: "initial",
-          }}
-          icon={faEllipsisH}
-          className="my_individual_appointment_expand_icon"
-          onClick={handleClick}
-
-        />
+       
 
 
         <Menu
