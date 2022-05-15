@@ -119,17 +119,6 @@ class hotelLogin extends Component {
 							fullWidth
 						/>
 
-						{/* <Link to="/admin" style={{ textDecoration: "none" }}>
-							<Button
-								type="submit"
-								variant="contained"
-								fullWidth
-								className={classes.submit}
-							>
-								Login
-							</Button>
-						</Link> */}
-
 						<div
 							role="button"
 							onClick={this.handleSubmit}
@@ -156,9 +145,4 @@ class hotelLogin extends Component {
 	}
 }
 
-// const mapStateToProps = (state) => ({
-//     user : state.user,
-//     errors : state.errors
-// })
-// export default connect(mapStateToProps, {loginUser} )(withStyles(styles)(login))
 export default withStyles(styles)(hotelLogin);

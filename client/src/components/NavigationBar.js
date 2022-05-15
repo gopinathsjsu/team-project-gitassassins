@@ -26,7 +26,7 @@ const styles = (theme) => ({
 		flexGrow: 1,
 		fontFamily: "Bebas Neue",
 		fontWeight: "600",
-        cursor :'pointer',
+		cursor: "pointer",
 		"&:hover": {
 			textDecoration: "none",
 		},
@@ -107,21 +107,51 @@ class NavigationBar extends Component {
 
 						<Button name="dummy" className={classes.dummy} />
 
-						{pathname !== "/admin" && (
-							<InputBase
-								id="location"
-								name="location"
-								className={classes.location}
-								placeholder="Enter a location"
-								onChange={this.handleChange}
-								startAdornment={
-									<SearchIcon style={{ color: "#2b2b2b" }} />
-								}
-							/>
-						)}
+						{pathname !== "/admin" ||
+							pathname !== "/hotelLogin" ||
+							(pathname !== "/hotelSignup" && (
+								<InputBase
+									id="location"
+									name="location"
+									className={classes.location}
+									placeholder="Enter a location"
+									onChange={this.handleChange}
+									startAdornment={
+										<SearchIcon
+											style={{ color: "#2b2b2b" }}
+										/>
+									}
+								/>
+							))}
 
 						{/* signup */}
-						{pathname !== "/admin" && !authenticated && (
+						{pathname !== "/admin" ||
+							pathname !== "/hotelLogin" ||
+							(pathname !== "/hotelSignup" && !authenticated && (
+								<Button
+									className={classes.button}
+									component={Link}
+									to="/signup"
+								>
+									Signup
+								</Button>
+							))}
+
+						{/* login */}
+						{pathname !== "/admin" ||
+							pathname !== "/hotelLogin" ||
+							(pathname !== "/hotelSignup" && !authenticated && (
+								<Button
+									className={classes.button}
+									component={Link}
+									to="/login"
+								>
+									Login
+								</Button>
+							))}
+
+						{/* signup */}
+						{!authenticated && (
 							<Button
 								className={classes.button}
 								component={Link}
@@ -132,7 +162,7 @@ class NavigationBar extends Component {
 						)}
 
 						{/* login */}
-						{pathname !== "/admin" && !authenticated && (
+						{!authenticated && (
 							<Button
 								className={classes.button}
 								component={Link}
@@ -142,43 +172,41 @@ class NavigationBar extends Component {
 							</Button>
 						)}
 
-                        {/* signup */}  
-                        {!authenticated && (                                          
-                        <Button className={classes.button} component = {Link} to="/signup" >
-                            Signup
-                        </Button>    
-                        )}
+						{pathname !== "/admin" ||
+							pathname !== "/hotelLogin" ||
+							(pathname !== "/hotelSignup" &&
+								!authenticated(
+									<Tooltip title="Reservation">
+										<Button
+											component={Link}
+											to="/reservations"
+										>
+											Reservations
+										</Button>
+									</Tooltip>
+								))}
 
-                        {/* login */}
-                        {!authenticated && (
-                        <Button className={classes.button} component = {Link} to="/login" >
-                            Login
-                        </Button>     
-                        )}                      
-
-                        {authenticated && ( 
-                            <Tooltip title="Reservation" >
-                                <Button component = {Link} to="/reservations" >
-                                    Reservations
-                                </Button>
-                            </Tooltip>
-                        )}  
-
-                        {authenticated && ( 
-                            <Tooltip title="Profile" >
-                                <Button component = {Link} to="/" >
-                                    <Avatar>{authenticatedUser.firstName.substring(0,1)}{authenticatedUser.lastName.substring(0,1)}</Avatar>
-                                </Button>
-                            </Tooltip>
-                        )}    
-
-                              
-                    </Toolbar>
-                </AppBar>
-            </div>
-        )
-    }
-
+						{authenticated && (
+							<Tooltip title="Profile">
+								<Button component={Link} to="/">
+									<Avatar>
+										{authenticatedUser.firstName.substring(
+											0,
+											1
+										)}
+										{authenticatedUser.lastName.substring(
+											0,
+											1
+										)}
+									</Avatar>
+								</Button>
+							</Tooltip>
+						)}
+					</Toolbar>
+				</AppBar>
+			</div>
+		);
+	}
 }
 
 const mapStateToProps = (state) => ({
