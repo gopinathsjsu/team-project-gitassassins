@@ -20,12 +20,14 @@ import {
   import { Modal } from 'react-bootstrap'
   import { KeyboardDatePicker , MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import cookie from 'react-cookies';
 
 
 import "./reservation.css";
 import Rooms from './Rooms'
 import { Alert, ListItemButton } from '@mui/material';
 import { Dropdown } from 'bootstrap';
+import UpdateModal from './UpdateModal';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +81,7 @@ export default function Reservations() {
   const classes = useStyles();
 
   const [activeReservationId, setActiveReservationId] = useState(false);
+  
   const handleChange = (reservationId) => (event, expanded) => {
     setActiveReservationId(expanded ? reservationId : false);
   };
@@ -91,7 +94,7 @@ export default function Reservations() {
   const [selectedStartDate, handleStartDateChange] = useState();
   const [selectedEndDate, handleEndDateChange] = useState();
   const [newGuest, handleNumberOfGuests] = useState();
-  const customerId = "626e4ef69f02707335d0c4d2";
+  const customerId = cookie.load("customer")._id;
 
 
 
@@ -121,7 +124,10 @@ export default function Reservations() {
   useEffect(() => {
     console.log("in reservations component")
     //axios.get(`${endPointObj.url}/job-seeker/get-company-photos/${companyId}`)
-    axios.get("reservation/customer/fetchAll/626e4ef69f02707335d0c4d2")
+    // 626e4ef69f02707335d0c4d2
+    //axios.get(`reservation/customer/fetchAll/626e4ef69f02707335d0c4d2`)
+    if (customerId){
+    axios.get(`reservation/customer/fetchAll/${customerId}`)
       .then(response => {
         console.log("Reservations by customer", response.data);
         setReservations(response.data);
@@ -140,6 +146,7 @@ export default function Reservations() {
           console.log("Error", err.response);
         }
       });
+    }
     }, [])
 
 
@@ -298,6 +305,15 @@ export default function Reservations() {
             
             const {totalBill, status, numberOfGuests, startDate, endDate} = reservationByIds[key][0]
             const active = activeReservationId === reservationId;
+            const props = {
+
+                reservationId : reservationId,
+                startDate : startDate,
+                endDate: endDate,
+                modalOpen: modalOpen,
+                closeUpdateModal:null,
+                guests: numberOfGuests
+            }
 
             return (
                 <>
@@ -376,11 +392,24 @@ export default function Reservations() {
 
                 </AccordionDetails>
               </Accordion>
-              {cancelModal(key)}
-          {updateModal(reservationByIds[key], numberOfGuests, startDate, endDate)}
+              {/* <UpdateModal
+            props = {props}         
+
+          /> */}
+            {
+                 activeReservationId===key? <UpdateModal props={props}
+                                        key= {props.reservationId}/>:null
+            }
+            {/* { activeReservationId? updateModal(reservationId,numberOfGuests,startDate,endDate):null} */}
+             {  activeReservationId===key?cancelModal(key):null}
+       
+
+          
               </>
               
-            );
+            );  
+
+            
             
           })}
 

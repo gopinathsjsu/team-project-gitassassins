@@ -12,13 +12,51 @@ import {
     TextField,
    
   } from "@material-ui/core";
-export default function UpdateModal (){
+export default function UpdateModal ({props}){
 
+  const [openModal, handleOpenModel]= useState();
+  const [selectedStartDate, handleStartDateChange] = useState(props.startDate);
+  const [selectedEndDate, handleEndDateChange] = useState(props.endDate);
+  const [newGuest, handleNumberOfGuests] = useState();
+
+  const closeUpdateModal = () => { 
+    window.location.reload(false);
+    handleOpenModel(false); }
+
+
+  console.log("Inside modal component", props);
+  
+   useEffect(()=>{
+
+        handleOpenModel(props.modalOpen);
+   },[]);
+  const updateReservation = async() =>{
+    //console.log("Functon data",selectedStartDate, selectedEndDate, activeReservationId);
+    let req ={
+        "startDate" : selectedStartDate,
+        "endDate" : selectedEndDate,
+        "numberOfGuests": newGuest
+    }
+    console.log("request", props.reservationId);
+    await axios.put(`/reservation/customer/update/${props.reservationId}`, req)
+    .then(response => {
+      console.log("Reservation Update Response", response.data);
+      alert(response.data.message);
+      window.location.reload(false);
+
+    })
+    .catch(err => {
+      if (err.response && err.response.data) {
+        console.log("Error", err.response);
+      }
+    });
+
+}
 
     return(
 
 
-        <Modal show={modalOpen} onHide={closeUpdateModal}
+        <Modal show={props.modalOpen} onHide={closeUpdateModal}
             onClose={closeUpdateModal}>
             <Modal.Header >
               <Modal.Title>Update Reservation</Modal.Title>
@@ -35,11 +73,11 @@ export default function UpdateModal (){
                         clearable
                         initialFocusedDate={null}
                         value={selectedStartDate}
-                        defaultValue={Date.parse(startDate)}
-                        placeholder={startDate}
+                        defaultValue={props.startDate}
+                        placeholder={props.startDate}
                         onChange={date => handleStartDateChange(date)}
                         // minDate={new Date()}
-                        format="MM/dd/yyyy"
+                        format="yyyy/MM/dd"
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
@@ -49,12 +87,13 @@ export default function UpdateModal (){
                        <KeyboardDatePicker
                         label="Check-out Date"
                         clearable
+                        initialFocusedDate={null}
                         value={selectedEndDate}
-                        defaultValue={Date.parse(endDate)}
-                        placeholder="10/10/2018"
+                        defaultValue={props.endDate}
+                        placeholder={props.endDate}
                         onChange={date => handleEndDateChange(date)}
-                        minDate={new Date()}
-                        format="MM/dd/yyyy"
+                        // minDate={new Date()}
+                        format="yyyy/MM/dd"
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
@@ -69,19 +108,24 @@ export default function UpdateModal (){
                       value = {newGuest}
                       onChange = {e => handleNumberOfGuests(e.target.value)}
                       style ={{width: 220}}
-                      defaultValue={guests}
+                      defaultValue={props.guests}
                     />
                   </Grid>
                   <br/>
                  
                    <Divider/>
-                  <Button variant="contained" color="primary" type="submit" onClick= {()=>{updateReservation(rooms[0].reservationId)}}>
-                    Submit
-                  </Button>
+                
                 </Grid>
               </form>
             </Modal.Body>
             <Modal.Footer>
+            <Button variant="contained" color="primary" type="submit" onClick= {()=>{updateReservation()}}>
+                    Submit
+                  </Button>
+                  <Button  color="primary" type="submit" onClick= {closeUpdateModal}>
+                    Cancel
+                  </Button>
+                  
             </Modal.Footer>
           </Modal>
 
