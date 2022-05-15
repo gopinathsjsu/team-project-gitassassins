@@ -87,7 +87,7 @@ class hotel extends Component {
 			console.log("No user cookie!");
 			this.props.history.push("/login");
 		} else {
-			console.log("All good on the cookie front!");
+			// console.log("All good on the cookie front!");
 		}
 		if (this.props.hotel.selectedHotel === undefined) {
 			this.refreshPage();

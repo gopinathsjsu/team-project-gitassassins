@@ -257,6 +257,7 @@ export class RoomService {
 			if (totalSurging > 0) {
 				const single = {
 					type: "SINGLE",
+					roomId: singleRoom[0].id,
 					availableRooms: Math.abs(
 						singleRoom[0].totalCount - singleRoomsBooked
 					),
@@ -269,6 +270,7 @@ export class RoomService {
 				availability.push(single);
 				const king = {
 					type: "KING",
+					roomId: kingRoom[0].id,
 					availableRooms: Math.abs(
 						kingRoom[0].totalCount - kingRoomsBooked
 					),
@@ -281,6 +283,7 @@ export class RoomService {
 				availability.push(king);
 				const queen = {
 					type: "QUEEN",
+					roomId: queenRoom[0].id,
 					availableRooms: Math.abs(
 						queenRoom[0].totalCount - queenRoomsBooked
 					),
@@ -293,6 +296,7 @@ export class RoomService {
 				availability.push(queen);
 				const suite = {
 					type: "SUITE",
+					roomId: suiteRoom[0].id,
 					availableRooms: Math.abs(
 						suiteRoom[0].totalCount - suiteRoomsBooked
 					),
@@ -308,6 +312,7 @@ export class RoomService {
 
 			const single = {
 				type: "SINGLE",
+				roomId: singleRoom[0].id,
 				availableRooms: Math.abs(
 					singleRoom[0].totalCount - singleRoomsBooked
 				),
@@ -318,6 +323,7 @@ export class RoomService {
 			availability.push(single);
 			const king = {
 				type: "KING",
+				roomId: kingRoom[0].id,
 				availableRooms: Math.abs(
 					kingRoom[0].totalCount - kingRoomsBooked
 				),
@@ -328,6 +334,7 @@ export class RoomService {
 			availability.push(king);
 			const queen = {
 				type: "QUEEN",
+				roomId: queenRoom[0].id,
 				availableRooms: Math.abs(
 					queenRoom[0].totalCount - queenRoomsBooked
 				),
@@ -338,6 +345,7 @@ export class RoomService {
 			availability.push(queen);
 			const suite = {
 				type: "SUITE",
+				roomId: suiteRoom[0].id,
 				availableRooms: Math.abs(
 					suiteRoom[0].totalCount - suiteRoomsBooked
 				),

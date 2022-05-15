@@ -8,9 +8,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 import { connect } from "react-redux";
-import { SET_SELECTED_ROOM } from "../redux/types";
+import { SET_SELECTED_ROOM, BOOK_ROOM } from "../redux/types";
 import store from "../redux/store";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -97,6 +98,7 @@ class RoomCard extends Component {
 		parking: false,
 		meals: false,
 		total: 0,
+		totalStay: 0,
 	};
 
 	handleOpen = () => {
@@ -111,30 +113,18 @@ class RoomCard extends Component {
 		});
 	};
 
-	handleBreakfastChange = (event) => {
+	handleBreakfastChange = () => {
 		this.setState({
-			breakfast:
-				this.state.breakfast && event.target.value === "on"
-					? false
-					: true,
-			total:
-				this.state.total + this.state.breakfast
-					? this.props.hotel.breakfastRate
-					: 0,
+			breakfast : !this.state.breakfast,
+			total : this.state.total + this.state.breakfast ? this.props.hotel.breakfastRate : -this.props.hotel.breakfastRate
 		});
 		console.log(JSON.stringify(this.state));
 	};
 
-	handleFitnessroomChange = (event) => {
+	handleFitnessroomChange = () => {
 		this.setState({
-			fitnessRoom:
-				this.state.fitnessRoom && event.target.value === "on"
-					? false
-					: true,
-			total:
-				this.state.total + this.state.fitnessRoom
-					? this.props.hotel.fitnessRate
-					: 0,
+			fitnessRoom: !this.state.fitnessRoom,
+			total : this.state.total + this.state.fitnessRoom ? this.props.hotel.fitnessRate : -this.props.hotel.fitnessRate
 		});
 		console.log(JSON.stringify(this.state));
 	};
@@ -155,10 +145,7 @@ class RoomCard extends Component {
 		this.handleOpen();
 	};
 
-	handleBookRoom = async () => {};
-
-	render() {
-		const { classes } = this.props;
+	handleBookRoom = async () => {
 		const { type, price, photoUrl, maximumOccupancy, availableRooms } =
 			this.props.room;
 		const {
@@ -170,8 +157,76 @@ class RoomCard extends Component {
 		} = this.props.hotel;
 		const { rewardPoints } = this.props.user.authenticatedUser;
 		const { loyalty } = this.props.user;
-		let amenitiesRate =
-			this.state.breakfast && breakfastRate
+		let amenitiesRate = this.state.breakfast && breakfastRate
+				? breakfastRate
+				: 0 + this.state.fitnessRoom && fitnessRate
+				? fitnessRate
+				: 0 + this.state.pool && swimmingRate
+				? swimmingRate
+				: 0 + this.state.parking && parkingRate
+				? parkingRate
+				: 0 + this.state.meals && mealRate
+				? mealRate
+				: 0;
+		
+		let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty;
+
+		let totalStay = Math.round(
+			(this.state.numRooms*(price + amenitiesRate) * 1.2 -
+				rewardPoints / 10 -
+				loyaltyPoints) *100) / 100
+
+		const roomDetails = {
+			"roomsData" : [
+				{
+					customerId : this.props.user.authenticatedUser._id,
+					roomId : this.props.room.roomId, 
+					hotelId : this.props.hotel.selectedHotel._id,
+					roomType : this.props.room.type,
+					startDate : this.props.hotel.startDate,
+					endDate : this.props.hotel.endDate,
+					numberOfGuests : this.state.numGuests,
+					numberOfRooms : this.state.numRooms,
+					totalBill : totalStay,
+					amenities : {
+						breakfast : this.state.breakfast,
+						fitnessRoom: this.state.fitnessRoom,
+						pool: this.state.pool,
+						parking: this.state.parking,
+						meals: this.state.meals,
+					}
+				}
+			]
+		}
+
+		console.log("roomDetails : " , this.props.user.authenticatedUser._id,  this.props.room.roomId, this.props.hotel.selectedHotel._id, this.props.room.type,)
+
+
+		console.log("roomDetails : " , roomDetails.roomsData[0])
+		await axios.post(`/reservation/reserve`, roomDetails).then((res) => {
+			console.log("book room" + JSON.stringify(res.data));
+			store.dispatch({
+				type: BOOK_ROOM
+			});
+		});
+	};
+
+	render() {
+		const { classes } = this.props;
+		// console.log(JSON.stringify(this.state.checkbox))
+		// console.log(JSON.stringify(this.state.checkbox[0]))
+		const { type, price, photoUrl, maximumOccupancy, availableRooms } =
+			this.props.room;
+		const {
+			breakfastRate,
+			fitnessRate,
+			swimmingRate,
+			parkingRate,
+			mealRate,
+		} = this.props.hotel;
+		const { rewardPoints } = this.props.user.authenticatedUser;
+		const { loyalty } = this.props.user;
+		let amenitiesRate = this.state.breakfast && breakfastRate
 				? breakfastRate
 				: 0 + this.state.fitnessRoom && fitnessRate
 				? fitnessRate
@@ -183,10 +238,17 @@ class RoomCard extends Component {
 				? mealRate
 				: 0;
 		// console.log("amenitiesRate "+amenitiesRate)
-
+		
 		let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty;
+
+		let totalStay = Math.round(
+			(this.state.numRooms*(price + amenitiesRate) * 1.2 -
+				rewardPoints / 10 -
+				loyaltyPoints) *100) / 100
+		
 		return (
 			<Grid container item xs={3} className={classes.card}>
+				{/* {this.handlePrice} */}
 				<div onClick={this.handleOnClick}>
 					<Grid
 						container
@@ -294,65 +356,17 @@ class RoomCard extends Component {
 
 						<Grid item xs={12}>
 							<FormGroup className={classes.form}>
-								{/* <Checkbox checked={this.state.breakfast} name="breakfast" onChange={this.handleBreakfastChange} />
-                                <Checkbox checked={this.state.fitnessRoom} name="fitnessRoom" onChange={this.handleFitnessroomChange}/> */}
-
-								<FormControlLabel
-									className={classes.checkbox}
-									control={
-										<Checkbox
-											checked={this.state.breakfast}
-											name="breakfast"
-											onChange={this.handleChange}
-										/>
-									}
-									label="Daily Continental Breakfast"
-								/>
-								<FormControlLabel
-									className={classes.checkbox}
-									control={
-										<Checkbox
-											checked={this.state.fitnessRoom}
-											name="fitnessRoom"
-											onChange={this.handleChange}
-										/>
-									}
-									label="Access to fitness room"
-								/>
-								<FormControlLabel
-									className={classes.checkbox}
-									control={
-										<Checkbox
-											checked={this.state.pool}
-											name="pool"
-											onChange={this.handleChange}
-										/>
-									}
-									label="Access to Swimming Pool/Jacuzzi"
-								/>
-								<FormControlLabel
-									className={classes.checkbox}
-									control={
-										<Checkbox
-											checked={this.state.parking}
-											name="parking"
-											onChange={this.handleChange}
-										/>
-									}
-									label="Daily Parking"
-								/>
-								<FormControlLabel
-									className={classes.checkbox}
-									control={
-										<Checkbox
-											checked={this.state.meals}
-											name="meals"
-											onChange={this.handleChange}
-										/>
-									}
-									label="Meals included (Breakfast, Lunch, Dinner)"
-								/>
-							</FormGroup>
+                                <FormControlLabel className={classes.checkbox} control={
+                                <Checkbox checked={this.state.breakfast} name="breakfast" onChange={this.handleChange} />} label="Daily Continental Breakfast" />
+                                <FormControlLabel className={classes.checkbox} control={
+                                <Checkbox checked={this.state.fitnessRoom} name="fitnessRoom" onChange={this.handleChange}/>} label="Access to fitness room" />
+                                <FormControlLabel className={classes.checkbox} control={
+                                <Checkbox checked={this.state.pool} name="pool" onChange={this.handleChange}/>} label="Access to Swimming Pool/Jacuzzi" />
+                                <FormControlLabel className={classes.checkbox} control={
+                                <Checkbox checked={this.state.parking} name="parking" onChange={this.handleChange}/>} label="Daily Parking" />
+                                <FormControlLabel className={classes.checkbox} control={
+                                <Checkbox checked={this.state.meals} name="meals" onChange={this.handleChange}/>} label="Meals included (Breakfast, Lunch, Dinner)" />
+                            </FormGroup>
 						</Grid>
 					</Grid>
 
@@ -397,7 +411,7 @@ class RoomCard extends Component {
 								className={classes.rate}
 								style={{ fontSize: "15px" }}
 							>
-								${Math.round(price * 100) / 100}
+								${Math.round(this.state.numRooms * price * 100) / 100}
 							</Grid>
 							<Grid
 								item
@@ -439,7 +453,7 @@ class RoomCard extends Component {
 								style={{ fontSize: "16px", fontWeight: "600" }}
 							>
 								$
-								{Math.round((price + amenitiesRate) * 100) /
+								{Math.round(this.state.numRooms * (price + amenitiesRate) * 100) /
 									100}
 							</Grid>
 							<Grid
@@ -466,7 +480,7 @@ class RoomCard extends Component {
 							>
 								$
 								{Math.round(
-									(price + amenitiesRate) * 0.2 * 100
+									this.state.numRooms * (price + amenitiesRate) * 0.2 * 100
 								) / 100}
 							</Grid>
 							<Grid
@@ -538,12 +552,7 @@ class RoomCard extends Component {
 								}}
 							>
 								$
-								{Math.round(
-									((price + amenitiesRate) * 1.2 -
-										rewardPoints / 10 -
-										loyaltyPoints) *
-										100
-								) / 100}
+								{totalStay}
 							</Grid>
 						</Grid>
 					</Grid>
@@ -552,7 +561,7 @@ class RoomCard extends Component {
 						<Grid item>
 							<div
 								role="button"
-								onClick={this.handleBookRoom}
+								onClick={(totalStay) => this.handleBookRoom()}
 								className={classes.button}
 							>
 								<Link
