@@ -5,6 +5,8 @@ import React, { Component } from "react";
 import landingPic from "../assets/landing.jpg";
 import AdminRoomUpdate from "./AdminRoomUpdate";
 
+import axios from "axios";
+
 const styles = (theme) => ({
 	...theme.spread,
 	landingPic: {

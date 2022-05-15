@@ -4,7 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 // import Typography from '@material-ui/core/Typography'
 import { Button } from "@material-ui/core";
-// import { Link } from 'react-router-dom'
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 //redux
 // import {connect} from 'react-redux'
@@ -34,18 +35,25 @@ const styles = (theme) => ({
 	textField: {
 		marginTop: "10px",
 	},
-	submit: {
-		marginTop: "10px",
-		backgroundColor: "#7db5e3",
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-	},
 	text3: {
 		marginTop: "10px",
 	},
 	errors: {
 		fontSize: "14px",
 		color: "red",
+	},
+	button: {
+		padding: "10px 190px",
+		cursor: "pointer",
+		color: "white",
+		marginTop: "20px",
+		marginBottom: "40px",
+		textTransform: "capitalize",
+		fontFamily: "Bebas Neue",
+		fontWeight: "600",
+		fontSize: "20px",
+		backgroundColor: "black",
+		borderRadius: "10px",
 	},
 });
 
@@ -61,13 +69,14 @@ class hotelLogin extends Component {
 		});
 	};
 
-	handleSubmit = (event) => {
+	handleSubmit = async (event) => {
 		event.preventDefault();
-		// var newUser = {
-		//     email : this.state.email,
-		//     password : this.state.password
-		// }
-		// this.props.loginUser(newUser, this.props.history)
+		const payload = {
+			email: this.state.email,
+			password: this.state.password,
+		};
+		const response = await axios.post(`/hotel/login`, payload);
+		localStorage.setItem("hotelId", response.data._id);
 	};
 
 	render() {
@@ -110,28 +119,34 @@ class hotelLogin extends Component {
 							fullWidth
 						/>
 
-						<Button
-							type="submit"
-							variant="contained"
-							fullWidth
-							className={classes.submit}
+						{/* <Link to="/admin" style={{ textDecoration: "none" }}>
+							<Button
+								type="submit"
+								variant="contained"
+								fullWidth
+								className={classes.submit}
+							>
+								Login
+							</Button>
+						</Link> */}
+
+						<div
+							role="button"
+							onClick={this.handleSubmit}
+							className={classes.button}
 						>
-							Login
-						</Button>
-						<br />
-
-						{/* <Typography className={classes.errors}>
-                            {this.props.errors.loginError ? this.props.errors.loginError : ''}
-                        </Typography>
-
-                        <Typography type="submit" className={classes.text3}>
-                            <span className={classes.new} >
-                                New to Uber Eats? 
-                            </span>
-                            <Typography className={classes.create} component = {Link} to="/signup" >
-                                Create an account
-                            </Typography>
-                        </Typography> */}
+							<Link
+								to="/admin"
+								style={{ textDecoration: "none" }}
+							>
+								<div
+									className={classes.checkout}
+									style={{ color: "white" }}
+								>
+									Login
+								</div>
+							</Link>
+						</div>
 					</form>
 				</Grid>
 

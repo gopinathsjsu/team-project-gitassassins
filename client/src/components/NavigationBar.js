@@ -83,6 +83,7 @@ class NavigationBar extends Component {
 	};
 
 	render() {
+		const pathname = window.location.pathname;
 		const { classes } = this.props;
 		const { authenticated, authenticatedUser } = this.props.user;
 		return (
@@ -105,19 +106,21 @@ class NavigationBar extends Component {
 
 						<Button name="dummy" className={classes.dummy} />
 
-						<InputBase
-							id="location"
-							name="location"
-							className={classes.location}
-							placeholder="Enter a location"
-							onChange={this.handleChange}
-							startAdornment={
-								<SearchIcon style={{ color: "#2b2b2b" }} />
-							}
-						/>
+						{pathname !== "/admin" && (
+							<InputBase
+								id="location"
+								name="location"
+								className={classes.location}
+								placeholder="Enter a location"
+								onChange={this.handleChange}
+								startAdornment={
+									<SearchIcon style={{ color: "#2b2b2b" }} />
+								}
+							/>
+						)}
 
 						{/* signup */}
-						{!authenticated && (
+						{pathname !== "/admin" && !authenticated && (
 							<Button
 								className={classes.button}
 								component={Link}
@@ -128,7 +131,7 @@ class NavigationBar extends Component {
 						)}
 
 						{/* login */}
-						{!authenticated && (
+						{pathname !== "/admin" && !authenticated && (
 							<Button
 								className={classes.button}
 								component={Link}

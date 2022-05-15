@@ -1,37 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
-import moment from "moment";
 
 const AdminRoomUpdate = () => {
 	const [type, setType] = useState("SINGLE");
 	const [price, setPrice] = useState();
 	const [maximumOccupancy, setMaximumOccupancy] = useState();
 	const [totalCount, setTotalCount] = useState();
+	const [imageUrl, setImageUrl] = useState();
+	const [roomId, setRoomId] = useState();
 
 	const handleUpdateRoom = async (e) => {
-		// const hotelId = localStorage.getItem("hotel_id");
-
-		const payload = { price, maximumOccupancy, totalCount };
-		// const res = await axios.put(
-		// 	`${BASE_API_URL}/rooms/${hotelId}/${type}`,
-		// 	{ payload }
-		// );
-
-		// console.log(res.data);
+		const payload = {
+			roomId: roomId,
+			price: price,
+			maximumOccupancy: maximumOccupancy,
+			totalCount: totalCount,
+		};
+		const response = await axios.put(`/room/update/`, payload);
+		console.log(response.data);
 	};
+
 	const getRoomTypeDetails = async () => {
-		// const hotelId = localStorage.getItem("hotel_id");
-		// const res = await axios.get(`${BASE_API_URL}/rooms/${hotelId}/${type}`);
-		// console.log(res.data);
-		// setMaximumOccupancy(maximumOccupancy);
-		// setTotalCount(totalCount);
-		// setPrice(price);
+		console.log("About to fetch deets");
+		const hotelId = localStorage.getItem("hotelId");
+		console.log("Hotel Id => ", hotelId);
+		const res = await axios.get(`/room/${hotelId}/${type}`);
+		const data = res.data[0];
+
+		const maximumOccupancy = data.maximumOccupancy;
+		const totalCount = data.totalCount;
+		const price = data.price;
+		const imageUrl = data.photoUrl;
+		const roomId = data._id;
+
+		setMaximumOccupancy(maximumOccupancy);
+		setTotalCount(totalCount);
+		setPrice(price);
+		setImageUrl(imageUrl);
+		setRoomId(roomId);
 	};
 
-	// useEffect(() => {
-	// 	getRoomTypeDetails();
-	// }, [type]);
+	useEffect(() => {
+		getRoomTypeDetails();
+	}, [type]);
 
 	return (
 		<div>
@@ -57,9 +69,7 @@ const AdminRoomUpdate = () => {
 								height: "100%",
 								border: "1px solid black",
 							}}
-							src={
-								"https://www.currentschoolnews.com/wp-content/uploads/2021/05/classic-twin-room-1.jpg"
-							}
+							src={imageUrl}
 							alt=""
 						/>
 
@@ -97,38 +107,42 @@ const AdminRoomUpdate = () => {
 							<Form.Control
 								className="s-input-main"
 								type="number"
-								onChange={(e) => e.target.value}
+								onChange={(e) => setPrice(e.target.value)}
 								value={price}
 							/>
 						</Form.Group>
+						<br />
 						<Form.Group>
 							<Form.Label>Max Occupancy</Form.Label>
 							<Form.Control
 								className="s-input-main"
 								type="number"
-								onChange={(e) => e.target.value}
+								onChange={(e) =>
+									setMaximumOccupancy(e.target.value)
+								}
 								min={1}
 								max={5}
 								value={maximumOccupancy}
 							/>
 						</Form.Group>
+						<br />
 						<Form.Group>
 							<Form.Label>Number of Rooms</Form.Label>
 							<Form.Control
 								className="s-input-main"
 								type="number"
-								onChange={(e) => e.target.value}
+								onChange={(e) => setTotalCount(e.target.value)}
 								value={totalCount}
 								min={1}
 								max={5}
 							/>
 						</Form.Group>
-
+						<br />
 						<div className="buttons-wrapper">
 							<Button
 								variant="primary"
 								size="lg"
-								type="submit"
+								type="button"
 								onClick={handleUpdateRoom}
 							>
 								Update Room
