@@ -1,4 +1,4 @@
-import { LOCATION_FILTER, LOGIN_USER, GET_LOYALTY } from "../types";
+import { LOCATION_FILTER, LOGIN_USER, GET_LOYALTY, LOGOUT } from "../types";
 
 const initialState = {
 	authenticated: false,
@@ -23,6 +23,13 @@ export default function userReducer(state = initialState, action) {
 				...state,
 				authenticated: true,
 				authenticatedUser: action.payload,
+			};
+
+		case LOGOUT:
+			return {
+				...state,
+				authenticated: false,
+				authenticatedUser: {},
 			};
 
 		case LOCATION_FILTER:

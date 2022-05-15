@@ -9,10 +9,10 @@ import InputBase from "@material-ui/core/InputBase";
 import Avatar from "@material-ui/core/Avatar";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link } from "react-router-dom";
-
+import cookie from "react-cookies";
 import { connect } from "react-redux";
 import store from "../redux/store";
-import { LOCATION_FILTER } from "../redux/types";
+import { LOCATION_FILTER, LOGOUT } from "../redux/types";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -66,6 +66,11 @@ const styles = (theme) => ({
 		marginRight: "20px",
 	},
 });
+
+const logoutHandler = () => {
+	cookie.remove("customer");
+	store.dispatch({ type: LOGOUT });
+};
 
 class NavigationBar extends Component {
 	state = {
@@ -175,17 +180,13 @@ class NavigationBar extends Component {
 						{pathname !== "/admin" &&
 							pathname !== "/hotelLogin" &&
 							pathname !== "/hotelSignup" &&
-								authenticated && (
-									<Tooltip title="Reservation">
-										<Button
-											component={Link}
-											to="/reservations"
-										>
-											Reservations
-										</Button>
-									</Tooltip>
-								)
-						}
+							authenticated && (
+								<Tooltip title="Reservation">
+									<Button component={Link} to="/reservations">
+										Reservations
+									</Button>
+								</Tooltip>
+							)}
 
 						{authenticated && (
 							<Tooltip title="Profile">
@@ -200,6 +201,18 @@ class NavigationBar extends Component {
 											1
 										)}
 									</Avatar>
+								</Button>
+							</Tooltip>
+						)}
+
+						{authenticated && (
+							<Tooltip title="Profile">
+								<Button
+									onClick={logoutHandler}
+									component={Link}
+									to="/"
+								>
+									Logout
 								</Button>
 							</Tooltip>
 						)}

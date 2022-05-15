@@ -21,7 +21,8 @@ export class HotelService {
 				hotelAddress: req.body.address,
 				seasonalHike: req.body.seasonalHike,
 				amenitiesCost: req.body.amenitiesCost,
-				photoUrl: req.body.photoUrl,
+				photoUrl:
+					"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/69/be/44/san-diego-mission-bay.jpg?w=1400&h=-1&s=1",
 			});
 
 			const response = await newHotel.save();
