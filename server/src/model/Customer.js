@@ -7,13 +7,6 @@ const customerSchema = new Schema({
 	lastName: { type: String },
 	email: { type: String, unique: true },
 	password: { type: String },
-	address: {
-		city: { type: String },
-		state: { type: String },
-		street: { type: String },
-		zipcode: { type: String },
-		country: { type: String },
-	},
 	rewardPoints: { type: Number, default: 0.0 },
 });
 
