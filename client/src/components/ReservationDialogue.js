@@ -111,6 +111,8 @@ class ReservationDialogue extends Component {
                     store.dispatch({
                         type : ROOM_SEARCH,
                         payload: res.data,
+                        startDate : startDate,
+                        endDate :endDate
                     })
                 })
             
