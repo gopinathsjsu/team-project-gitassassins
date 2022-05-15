@@ -107,9 +107,9 @@ class NavigationBar extends Component {
 
 						<Button name="dummy" className={classes.dummy} />
 
-						{pathname !== "/admin" ||
-							pathname !== "/hotelLogin" ||
-							(pathname !== "/hotelSignup" && (
+						{pathname !== "/admin" &&
+							pathname !== "/hotelLogin" &&
+							pathname !== "/hotelSignup" && (
 								<InputBase
 									id="location"
 									name="location"
@@ -122,7 +122,7 @@ class NavigationBar extends Component {
 										/>
 									}
 								/>
-							))}
+							)}
 
 						{/* signup */}
 						{pathname !== "/admin" ||

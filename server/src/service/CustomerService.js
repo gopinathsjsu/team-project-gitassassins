@@ -34,7 +34,7 @@ export class CustomerService {
 				res.status(400).send({ validCredentials: false });
 			} else {
 				const customerId = response.id;
-				res.cookie("customerId", customerId, {
+				res.cookie("customer", JSON.stringify(response), {
 					maxAge: 3600000,
 					httpOnly: false,
 					path: "/",

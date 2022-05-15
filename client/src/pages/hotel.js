@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { GET_HOTEL } from "../redux/types";
 import axios from "axios";
 import store from "../redux/store";
-
+import cookie from "react-cookies";
 import Grid from "@material-ui/core/Grid";
 import ReservationDialogue from "../components/ReservationDialogue";
 import RoomCard from "../components/RoomCard";
@@ -83,6 +83,12 @@ class hotel extends Component {
 	};
 
 	render() {
+		if (!cookie.load("customer")) {
+			console.log("No user cookie!");
+			this.props.history.push("/login");
+		} else {
+			console.log("All good on the cookie front!");
+		}
 		if (this.props.hotel.selectedHotel === undefined) {
 			this.refreshPage();
 			return "";
