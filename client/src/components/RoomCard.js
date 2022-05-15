@@ -6,9 +6,10 @@ import Dialog from "@material-ui/core/Dialog";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 
 import { connect } from "react-redux";
-import { SET_SELECTED_ROOM, BOOK_ROOM } from "../redux/types";
+import { SET_SELECTED_ROOM, BOOK_ROOM, BREAKFAST, FITNESSROOM, POOL, PARKING, MEALS } from "../redux/types";
 import store from "../redux/store";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -92,11 +93,6 @@ class RoomCard extends Component {
 		open: false,
 		numRooms: 1,
 		numGuests: 1,
-		breakfast: false,
-		fitnessRoom: false,
-		pool: false,
-		parking: false,
-		meals: false,
 		total: 0,
 		totalStay: 0,
 	};
@@ -114,19 +110,33 @@ class RoomCard extends Component {
 	};
 
 	handleBreakfastChange = () => {
-		this.setState({
-			breakfast : !this.state.breakfast,
-			total : this.state.total + this.state.breakfast ? this.props.hotel.breakfastRate : -this.props.hotel.breakfastRate
-		});
-		console.log(JSON.stringify(this.state));
+		store.dispatch({
+			type: BREAKFAST,
+		})
 	};
 
 	handleFitnessroomChange = () => {
-		this.setState({
-			fitnessRoom: !this.state.fitnessRoom,
-			total : this.state.total + this.state.fitnessRoom ? this.props.hotel.fitnessRate : -this.props.hotel.fitnessRate
-		});
-		console.log(JSON.stringify(this.state));
+		store.dispatch({
+			type: FITNESSROOM,
+		})
+	};
+
+	handlePoolChange = () => {
+		store.dispatch({
+			type: POOL,
+		})
+	};
+
+	handleParkingChange = () => {
+		store.dispatch({
+			type: PARKING,
+		})
+	};
+
+	handleMealsChange = () => {
+		store.dispatch({
+			type: MEALS,
+		})
 	};
 
 	handleChange = (event) => {
@@ -145,34 +155,42 @@ class RoomCard extends Component {
 		this.handleOpen();
 	};
 
-	handleBookRoom = async () => {
-		const { type, price, photoUrl, maximumOccupancy, availableRooms } =
-			this.props.room;
+	handleAmenitiesPrice = () => {
 		const {
 			breakfastRate,
 			fitnessRate,
 			swimmingRate,
 			parkingRate,
 			mealRate,
+			breakfast,
+			fitnessRoom,
+			pool,
+			parking,
+			meals
 		} = this.props.hotel;
+
+		let bf = breakfast ? breakfastRate : 0
+		let ft = fitnessRoom ? fitnessRate : 0
+		let sw = pool ? swimmingRate : 0
+		let pk = parking ? parkingRate : 0
+		let ml = meals ? mealRate : 0
+		let total  = bf + ft + sw + pk + ml
+
+		this.setState({
+			total : total
+		})
+	}
+
+	handleBookRoom = async () => {
+		const { type, price, photoUrl, maximumOccupancy, availableRooms } =
+			this.props.room;
 		const { rewardPoints } = this.props.user.authenticatedUser;
 		const { loyalty } = this.props.user;
-		let amenitiesRate = this.state.breakfast && breakfastRate
-				? breakfastRate
-				: 0 + this.state.fitnessRoom && fitnessRate
-				? fitnessRate
-				: 0 + this.state.pool && swimmingRate
-				? swimmingRate
-				: 0 + this.state.parking && parkingRate
-				? parkingRate
-				: 0 + this.state.meals && mealRate
-				? mealRate
-				: 0;
 		
 		let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty;
 
 		let totalStay = Math.round(
-			(this.state.numRooms*(price + amenitiesRate) * 1.2 -
+			(this.state.numRooms*(price + this.state.total) * 1.2 -
 				rewardPoints / 10 -
 				loyaltyPoints) *100) / 100
 
@@ -223,26 +241,16 @@ class RoomCard extends Component {
 			swimmingRate,
 			parkingRate,
 			mealRate,
+			breakfast,
+			fitnessRoom
 		} = this.props.hotel;
 		const { rewardPoints } = this.props.user.authenticatedUser;
 		const { loyalty } = this.props.user;
-		let amenitiesRate = this.state.breakfast && breakfastRate
-				? breakfastRate
-				: 0 + this.state.fitnessRoom && fitnessRate
-				? fitnessRate
-				: 0 + this.state.pool && swimmingRate
-				? swimmingRate
-				: 0 + this.state.parking && parkingRate
-				? parkingRate
-				: 0 + this.state.meals && mealRate
-				? mealRate
-				: 0;
-		// console.log("amenitiesRate "+amenitiesRate)
 		
 		let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty;
 
 		let totalStay = Math.round(
-			(this.state.numRooms*(price + amenitiesRate) * 1.2 -
+			(this.state.numRooms*(price + this.state.total) * 1.2 -
 				rewardPoints / 10 -
 				loyaltyPoints) *100) / 100
 		
@@ -357,16 +365,20 @@ class RoomCard extends Component {
 						<Grid item xs={12}>
 							<FormGroup className={classes.form}>
                                 <FormControlLabel className={classes.checkbox} control={
-                                <Checkbox checked={this.state.breakfast} name="breakfast" onChange={this.handleChange} />} label="Daily Continental Breakfast" />
+                                <Checkbox checked={this.props.hotel.breakfast} name="breakfast" onChange={this.handleBreakfastChange} />} label={`Daily Continental Breakfast ($${this.props.hotel.breakfastRate})`} />
                                 <FormControlLabel className={classes.checkbox} control={
-                                <Checkbox checked={this.state.fitnessRoom} name="fitnessRoom" onChange={this.handleChange}/>} label="Access to fitness room" />
+                                <Checkbox checked={this.props.hotel.fitnessRoom} name="fitnessRoom" onChange={this.handleFitnessroomChange}/>} label={`Access to fitness room ($${this.props.hotel.fitnessRate})`} />
                                 <FormControlLabel className={classes.checkbox} control={
-                                <Checkbox checked={this.state.pool} name="pool" onChange={this.handleChange}/>} label="Access to Swimming Pool/Jacuzzi" />
+                                <Checkbox checked={this.props.hotel.pool} name="pool" onChange={this.handlePoolChange}/>} label={`Access to Swimming Pool/Jacuzzi ($${this.props.hotel.swimmingRate})`}/>
                                 <FormControlLabel className={classes.checkbox} control={
-                                <Checkbox checked={this.state.parking} name="parking" onChange={this.handleChange}/>} label="Daily Parking" />
+                                <Checkbox checked={this.props.hotel.parking} name="parking" onChange={this.handleParkingChange}/>} label={`Daily Parking ($${this.props.hotel.parkingRate})`} />
                                 <FormControlLabel className={classes.checkbox} control={
-                                <Checkbox checked={this.state.meals} name="meals" onChange={this.handleChange}/>} label="Meals included (Breakfast, Lunch, Dinner)" />
-                            </FormGroup>
+                                <Checkbox checked={this.props.hotel.meals} name="meals" onChange={this.handleMealsChange}/>} label={`Meals included (Breakfast, Lunch, Dinner) ($${this.props.hotel.mealRate})`} />
+                            <Button onClick={this.handleAmenitiesPrice}  style={{cursor: "pointer",marginBottom: "10px",textTransform: "capitalize",fontFamily: "Bebas Neue",fontWeight: "600",fontSize: "16px",}}>
+								Apply changes
+							</Button>
+							</FormGroup>
+							
 						</Grid>
 					</Grid>
 
@@ -435,7 +447,7 @@ class RoomCard extends Component {
 							>
 								$
 								{Math.round(
-									amenitiesRate * this.state.numRooms * 100
+									this.state.total * this.state.numRooms * 100
 								) / 100}
 							</Grid>
 							<Grid
@@ -453,7 +465,7 @@ class RoomCard extends Component {
 								style={{ fontSize: "16px", fontWeight: "600" }}
 							>
 								$
-								{Math.round(this.state.numRooms * (price + amenitiesRate) * 100) /
+								{Math.round(this.state.numRooms * (price + this.state.total) * 100) /
 									100}
 							</Grid>
 							<Grid
@@ -480,7 +492,7 @@ class RoomCard extends Component {
 							>
 								$
 								{Math.round(
-									this.state.numRooms * (price + amenitiesRate) * 0.2 * 100
+									this.state.numRooms * (price + this.state.total) * 0.2 * 100
 								) / 100}
 							</Grid>
 							<Grid
@@ -493,7 +505,7 @@ class RoomCard extends Component {
 									color: "#bf2e45",
 								}}
 							>
-								Reward Points ({rewardPoints} points)
+								Reward Points ({Math.round(rewardPoints * 100)/100} points)
 							</Grid>
 							<Grid
 								item
@@ -505,7 +517,7 @@ class RoomCard extends Component {
 									color: "#bf2e45",
 								}}
 							>
-								-${Math.round((rewardPoints / 10) * 100) / 100}
+								-${Math.round((rewardPoints *100) / 100) / 100}
 							</Grid>
 							<Grid
 								item
@@ -518,7 +530,7 @@ class RoomCard extends Component {
 									color: "#bf2e45",
 								}}
 							>
-								Loyalty Points ({loyaltyPoints} points)
+								Loyalty Points ({Math.round(loyaltyPoints*100)/100} points)
 							</Grid>
 							<Grid
 								item
