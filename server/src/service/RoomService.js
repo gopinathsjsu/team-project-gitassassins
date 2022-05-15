@@ -23,14 +23,19 @@ export class RoomService {
 	// 	}
 	// };
 
-	// getRoomByTypeForAdmin = async (req, res) => {
-	// 	const hotelId = req.query.hotelId;
-	// 	const type = req.query.type;
-	// 	console.log(hotelId, type);
-	// 	try {
-	// 		const response = await Room.find({hotelId: hotelId, })
-	// 	}
-	// }
+	getRoomByTypeForAdmin = async (req, res) => {
+		const hotelId = req.params.hotelId;
+		const type = req.params.type;
+		console.log(hotelId, type);
+		try {
+			const response = await Room.find({ hotelId: hotelId, type: type });
+			console.log(response);
+			res.status(200).send(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send("Could not fetch room details");
+		}
+	};
 
 	update = async (req, res) => {
 		console.log(req.body);

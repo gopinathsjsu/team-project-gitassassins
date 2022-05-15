@@ -7,3 +7,4 @@ const roomService = new RoomService();
 // roomController.post("/room/create", roomService.create);
 roomController.get("/room/search", roomService.searchRoomAvailability);
 roomController.put("/room/update", roomService.update);
+roomController.get("/room/:hotelId/:type", roomService.getRoomByTypeForAdmin);
