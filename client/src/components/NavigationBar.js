@@ -172,10 +172,10 @@ class NavigationBar extends Component {
 							</Button>
 						)}
 
-						{pathname !== "/admin" ||
-							pathname !== "/hotelLogin" ||
-							(pathname !== "/hotelSignup" &&
-								!authenticated(
+						{pathname !== "/admin" &&
+							pathname !== "/hotelLogin" &&
+							pathname !== "/hotelSignup" &&
+								authenticated && (
 									<Tooltip title="Reservation">
 										<Button
 											component={Link}
@@ -184,7 +184,8 @@ class NavigationBar extends Component {
 											Reservations
 										</Button>
 									</Tooltip>
-								))}
+								)
+						}
 
 						{authenticated && (
 							<Tooltip title="Profile">
