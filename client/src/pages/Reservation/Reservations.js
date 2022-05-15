@@ -156,8 +156,9 @@ export default function Reservations() {
         axios.put(`/reservation/customer/cancel/${reservationId}`)
       .then(response => {
         console.log("Reservation Cancel Response", response.data);
-        <Alert>Reservation Successfully Cancelled! Refund initiated.</Alert>
-      })
+        alert("Reservation Successfully Cancelled! Refund initiated.");
+        window.location.reload(false);
+    })
       .catch(err => {
         if (err.response && err.response.data) {
           console.log("Error", err.response);

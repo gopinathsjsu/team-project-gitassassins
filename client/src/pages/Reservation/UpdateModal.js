@@ -17,6 +17,9 @@ export default function UpdateModal ({props}){
   const [openModal, handleOpenModel]= useState();
   const [selectedStartDate, handleStartDateChange] = useState(props.startDate);
   const [selectedEndDate, handleEndDateChange] = useState(props.endDate);
+  const [defaultStart, setDefaultStart] = useState(props.startDate);
+  const [defaultEnd, setDefaultEnd] = useState(props.endDate);
+
   const [newGuest, handleNumberOfGuests] = useState();
 
   const closeUpdateModal = () => { 
@@ -26,9 +29,17 @@ export default function UpdateModal ({props}){
 
   console.log("Inside modal component", props);
   
-   useEffect(()=>{
 
-        handleOpenModel(props.modalOpen);
+   useEffect(()=>{
+    var startdate = new Date(defaultStart);
+    startdate.setDate(startdate.getDate() + 1)
+    setDefaultStart(startdate.toDateString());
+    var enddate = new Date(defaultEnd);
+    enddate.setDate(enddate.getDate() + 1)
+    setDefaultEnd(enddate.toDateString());
+    console.log("default start & end",startdate,enddate);
+    handleOpenModel(props.modalOpen);
+
    },[]);
   const updateReservation = async() =>{
     //console.log("Functon data",selectedStartDate, selectedEndDate, activeReservationId);
@@ -37,6 +48,7 @@ export default function UpdateModal ({props}){
         "endDate" : selectedEndDate,
         "numberOfGuests": newGuest
     }
+
     console.log("request", props.reservationId);
     await axios.put(`/reservation/customer/update/${props.reservationId}`, req)
     .then(response => {
@@ -73,8 +85,8 @@ export default function UpdateModal ({props}){
                         clearable
                         initialFocusedDate={null}
                         value={selectedStartDate}
-                        defaultValue={props.startDate}
-                        placeholder={props.startDate}
+                        defaultValue={defaultStart}
+                        placeholder={defaultStart}
                         onChange={date => handleStartDateChange(date)}
                         // minDate={new Date()}
                         format="yyyy/MM/dd"
@@ -89,8 +101,8 @@ export default function UpdateModal ({props}){
                         clearable
                         initialFocusedDate={null}
                         value={selectedEndDate}
-                        defaultValue={props.endDate}
-                        placeholder={props.endDate}
+                        defaultValue={defaultEnd}
+                        placeholder={defaultEnd}
                         onChange={date => handleEndDateChange(date)}
                         // minDate={new Date()}
                         format="yyyy/MM/dd"
