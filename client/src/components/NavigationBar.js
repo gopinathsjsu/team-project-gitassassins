@@ -26,6 +26,7 @@ const styles = (theme) => ({
 		flexGrow: 1,
 		fontFamily: "Bebas Neue",
 		fontWeight: "600",
+        cursor :'pointer',
 		"&:hover": {
 			textDecoration: "none",
 		},
@@ -138,27 +139,43 @@ class NavigationBar extends Component {
 							</Button>
 						)}
 
-						{authenticated && (
-							<Tooltip title="Profile">
-								<Button component={Link} to="/">
-									<Avatar>
-										{authenticatedUser.firstName.substring(
-											0,
-											1
-										)}
-										{authenticatedUser.lastName.substring(
-											0,
-											1
-										)}
-									</Avatar>
-								</Button>
-							</Tooltip>
-						)}
-					</Toolbar>
-				</AppBar>
-			</div>
-		);
-	}
+                        {/* signup */}  
+                        {!authenticated && (                                          
+                        <Button className={classes.button} component = {Link} to="/signup" >
+                            Signup
+                        </Button>    
+                        )}
+
+                        {/* login */}
+                        {!authenticated && (
+                        <Button className={classes.button} component = {Link} to="/login" >
+                            Login
+                        </Button>     
+                        )}                      
+
+                        {authenticated && ( 
+                            <Tooltip title="Reservation" >
+                                <Button component = {Link} to="/reservations" >
+                                    Reservations
+                                </Button>
+                            </Tooltip>
+                        )}  
+
+                        {authenticated && ( 
+                            <Tooltip title="Profile" >
+                                <Button component = {Link} to="/" >
+                                    <Avatar>{authenticatedUser.firstName.substring(0,1)}{authenticatedUser.lastName.substring(0,1)}</Avatar>
+                                </Button>
+                            </Tooltip>
+                        )}    
+
+                              
+                    </Toolbar>
+                </AppBar>
+            </div>
+        )
+    }
+
 }
 
 const mapStateToProps = (state) => ({

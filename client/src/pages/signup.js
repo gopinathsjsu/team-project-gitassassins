@@ -179,38 +179,33 @@ class signup extends Component {
                             {this.props.errors.signupError ? this.props.errors.signupError : ''}
                         </Typography> */}
 
-						<Typography type="submit" className={classes.text3}>
-							<span className={classes.new}>
-								Already a member?
-							</span>
-							<Typography
-								className={classes.create}
-								component={Link}
-								to="/login"
-							>
-								Login here
-							</Typography>
-						</Typography>
+                        <Typography type="submit" className={classes.text3}>
+                            <span className={classes.new} >
+                                Already a member? 
+                            </span>
+                            <Typography className={classes.create} component = {Link} to="/login" >
+                                Login here
+                            </Typography>
+                        </Typography>
 
-						<Typography type="submit" className={classes.text3}>
-							<span className={classes.new}>
-								Are you a admin?
-							</span>
-							<Typography
-								className={classes.create}
-								component={Link}
-								to="/hotelSignup"
-							>
-								Create an account here
-							</Typography>
-						</Typography>
-					</form>
-				</Grid>
+                        <Typography type="submit" className={classes.text3}>
+                            <span className={classes.new} >
+                                Are you an admin?
+                            </span>
+                            <Typography className={classes.create} component = {Link} to="/hotelSignup" >
+                                Create an account here
+                            </Typography>
+                        </Typography>
+                    </form>
+                </Grid>
 
-				<Grid item sm={4}></Grid>
-			</Grid>
-		);
-	}
+                <Grid item sm={4}>
+                </Grid>
+                
+            </Grid>
+        )
+    }
+
 }
 
 export default withStyles(styles)(signup);
