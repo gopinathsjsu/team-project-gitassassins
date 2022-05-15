@@ -81,7 +81,7 @@ class home extends Component {
 				<Grid container item xs={12} className={classes.explore}>
 					Explore Premier Inn Hotels around the country
 				</Grid>
-				<Grid container item sm={3} style={{ paddingLeft: "20px" }}>
+				<Grid container item xs={12} style={{ paddingLeft: "20px" }}>
 					{this.displayHotels()}
 				</Grid>
 			</Grid>
