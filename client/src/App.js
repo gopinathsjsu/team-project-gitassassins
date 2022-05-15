@@ -3,7 +3,6 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Provider } from "react-redux";
-import store from "./redux/store";
 
 import home from "./pages/home";
 import login from "./pages/login";
@@ -16,6 +15,28 @@ import NavigationBar from "./components/NavigationBar";
 import hotelSignup from "./pages/hotelSignup";
 import hotelLogin from "./pages/hotelLogin";
 import adminPage from "./pages/admin";
+import cookie from "react-cookies";
+
+//redux
+import { LOGIN_USER } from "./redux/types"
+import store from "./redux/store"
+
+const user = cookie.load("customer")
+// console.log(user._id, user.firstName, user.lastName, user.email);
+
+if(user){
+  let userDetails = {
+	_id : user._id,
+	firstName : user.firstName,
+	lastName : user.lastName,
+	email : user.email
+  }
+  store.dispatch({
+	type : LOGIN_USER,
+	payload : userDetails
+  })
+}
+
 class App extends Component {
 	render() {
 		return (

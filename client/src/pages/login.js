@@ -4,16 +4,12 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
-import cookie from "react-cookies";
 
 //redux
 import { connect } from "react-redux";
 import axios from "axios";
 import { LOGIN_USER, GET_LOYALTY } from "../redux/types";
 import store from "../redux/store";
-
-const user = cookie.load("customer");
-// console.log(user._id, user.firstName, user.lastName, user.email);
 
 const styles = (theme) => ({
 	...theme.spread,
