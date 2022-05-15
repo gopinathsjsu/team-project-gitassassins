@@ -1,9 +1,16 @@
 import Hotel from "../model/Hotel.js";
-// import CommonService from "./CommonService.js";
+import Room from "../model/Room.js";
 
-// const commonService = new CommonService();
 export class HotelService {
 	create = async (req, res) => {
+		const roomTypes = ["SINGLE", "KING", "QUEEN", "SUITE"];
+		const roomImages = {
+			SINGLE: "https://14reasonswhy.gr/storage/2019/04/Small-Double-Room-2.jpg",
+			KING: "https://dh-prod-cdn.azureedge.net/-/media/property/destination-hotels/hotel-de-anza/deluxe-de-anza-king.jpg?ts=6a31677d-e712-4e19-be27-eb691d802baa",
+			QUEEN: "https://media-cdn.tripadvisor.com/media/photo-s/06/da/82/8e/rooms-hotel-tbilisi.jpg",
+			SUITE: "https://www.omnihotels.com/-/media/images/hotels/daldtn/reservationrooms/daldtn_lk_2.jpg?h=660&la=en&w=1170",
+		};
+
 		try {
 			console.log(req.body);
 
@@ -18,6 +25,22 @@ export class HotelService {
 			});
 
 			const response = await newHotel.save();
+			const hotelId = response.id;
+			console.log("Hotel insert id => ", hotelId);
+
+			for (const roomType of roomTypes) {
+				const newRoom = new Room({
+					hotelId: hotelId,
+					type: roomType, // "SUITE", "SINGLE", "KING", "QUEEN"
+					price: 0,
+					totalCount: 0,
+					maximumOccupancy: 0,
+					photoUrl: roomImages[roomType],
+				});
+
+				await newRoom.save();
+			}
+
 			return res.status(200).send(response);
 		} catch (err) {
 			console.error(err);

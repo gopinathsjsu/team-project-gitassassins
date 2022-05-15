@@ -3,25 +3,34 @@ import Reservation from "../model/Reservation.js";
 import Holidays from "date-holidays";
 
 export class RoomService {
-	create = async (req, res) => {
-		try {
-			console.log(req.body);
+	// create = async (req, res) => {
+	// 	try {
+	// 		console.log(req.body);
 
-			const newRoom = new Room({
-				hotelId: req.body.hotelId,
-				type: req.body.type, // "SUITE", "SINGLE", "KING", "QUEEN"
-				price: req.body.price,
-				totalCount: req.body.totalCount,
-				maximumOccupancy: req.body.maximumOccupancy,
-				photoUrl: req.body.photoUrl ? req.body.photoUrl : null,
-			});
+	// 		const newRoom = new Room({
+	// 			hotelId: req.body.hotelId,
+	// 			type: req.body.type, // "SUITE", "SINGLE", "KING", "QUEEN"
+	// 			price: req.body.price,
+	// 			totalCount: req.body.totalCount,
+	// 			maximumOccupancy: req.body.maximumOccupancy,
+	// 			photoUrl: req.body.photoUrl ? req.body.photoUrl : null,
+	// 		});
 
-			const response = await newRoom.save();
-			res.status(200).send(response);
-		} catch (err) {
-			console.error(err);
-		}
-	};
+	// 		const response = await newRoom.save();
+	// 		res.status(200).send(response);
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// };
+
+	// getRoomByTypeForAdmin = async (req, res) => {
+	// 	const hotelId = req.query.hotelId;
+	// 	const type = req.query.type;
+	// 	console.log(hotelId, type);
+	// 	try {
+	// 		const response = await Room.find({hotelId: hotelId, })
+	// 	}
+	// }
 
 	update = async (req, res) => {
 		console.log(req.body);
