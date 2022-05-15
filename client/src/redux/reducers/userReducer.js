@@ -34,7 +34,7 @@ export default function userReducer(state = initialState, action){
         case GET_LOYALTY:
             return {
                 ...state,
-                loyalty : action.payload
+                loyalty : action.payload.loyaltyDiscount
             }
             
         default : 

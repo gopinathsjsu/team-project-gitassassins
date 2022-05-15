@@ -8,8 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 
 import {connect} from 'react-redux'
-import axios from "axios"
-import { SET_SELECTED_ROOM, GET_LOYALTY } from '../redux/types'
+import { SET_SELECTED_ROOM } from '../redux/types'
 import store from '../redux/store'
 import { Link } from 'react-router-dom'
 
@@ -33,7 +32,7 @@ const styles = (theme) => ({
         height : '140px',
         backgroundSize: 'cover',
         objectFit : 'cover',
-        resize: 'both',
+        // resize: 'both',
         backgroundPosition: 'center',
     },
     name : {
@@ -97,20 +96,8 @@ class RoomCard extends Component {
         pool: false,
         parking: false,
         meals: false,
+        total : 0
     }
-
-	fetchHotelDetails = async () => {
-		let userId = this.props.user.authenticatedUser._id;
-
-		//get data for specific hotel
-		await axios.get(`/customer/loyalty/${userId}`).then((res) => {
-			console.log("load loyalty" + JSON.stringify(res.data));
-			store.dispatch({
-				type: GET_LOYALTY,
-				payload: res.data,
-			});
-		});
-	};
 
     handleOpen = () => {
         this.setState({
@@ -124,11 +111,28 @@ class RoomCard extends Component {
         })
     }
 
+    handleBreakfastChange = (event) => {
+        this.setState({
+            breakfast : this.state.breakfast && event.target.value == "on" ? false : true,
+            total : this.state.total + this.state.breakfast? this.props.hotel.breakfastRate : 0
+        })
+        console.log(JSON.stringify(this.state))
+
+    }
+
+    handleFitnessroomChange = (event) => {
+        this.setState({
+            fitnessRoom : this.state.fitnessRoom && event.target.value == "on" ? false : true,
+            total : this.state.total + this.state.fitnessRoom? this.props.hotel.fitnessRate : 0
+        })
+        console.log(JSON.stringify(this.state))
+
+    }
+
     handleChange = (event) => {
         this.setState({
             [event.target.name] : event.target.value === "on" ? true : event.target.value === "true" ? false : true
         })
-        console.log(JSON.stringify(this.state))
     }
 
     handleOnClick = () => {
@@ -149,7 +153,8 @@ class RoomCard extends Component {
         const { classes } = this.props
         const { type, price, photoUrl, maximumOccupancy, availableRooms} = this.props.room
         const { breakfastRate, fitnessRate, swimmingRate,parkingRate, mealRate} = this.props.hotel
-        const { rewardPoints, loyalty } = this.props.user.authenticatedUser
+        const { rewardPoints } = this.props.user.authenticatedUser
+        const { loyalty } = this.props.user
         let amenitiesRate = this.state.breakfast && breakfastRate ? breakfastRate : 0 
          + this.state.fitnessRoom && fitnessRate ? fitnessRate : 0 
          + this.state.pool && swimmingRate  ? swimmingRate : 0 
@@ -158,7 +163,6 @@ class RoomCard extends Component {
         // console.log("amenitiesRate "+amenitiesRate)
 
         let loyaltyPoints = isNaN(loyalty) ? 0 : loyalty 
-        console.log(loyaltyPoints+" loyal")
         return (
             <Grid container item xs={3} className={classes.card} >
                 <div onClick={this.handleOnClick}>
@@ -176,10 +180,10 @@ class RoomCard extends Component {
                         </Grid>
                     </Grid>   
                 </div>
-                {this.fetchLoyaltyDetails}
+                
 
                 <Dialog open={this.state.open} onClose={this.handleClose} fullWidth maxWidth="md">  
-
+                {/* <Dialog open={true} onClose={this.handleClose} fullWidth maxWidth="md">   */}
                     <img className={classes.imgDialog} src={photoUrl} alt="photoUrl" />
 
                     <div className={classes.name}>{type} Room</div>
@@ -208,6 +212,9 @@ class RoomCard extends Component {
 
                         <Grid item xs={12} >
                             <FormGroup className={classes.form}>
+                                {/* <Checkbox checked={this.state.breakfast} name="breakfast" onChange={this.handleBreakfastChange} />
+                                <Checkbox checked={this.state.fitnessRoom} name="fitnessRoom" onChange={this.handleFitnessroomChange}/> */}
+
                                 <FormControlLabel className={classes.checkbox} control={
                                 <Checkbox checked={this.state.breakfast} name="breakfast" onChange={this.handleChange} />} label="Daily Continental Breakfast" />
                                 <FormControlLabel className={classes.checkbox} control={
@@ -238,47 +245,43 @@ class RoomCard extends Component {
                                 Room rate
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '15px'}}>
-                                ${price}
+                                ${Math.round(price * 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '15px', borderBottom : '1px solid #d6d6d6'}}>
                                 Amenities
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '15px', borderBottom : '1px solid #d6d6d6'}}>
-                                ${this.state.breakfast && breakfastRate ? breakfastRate : 0 
-         + this.state.fitnessRoom && fitnessRate ? fitnessRate : 0 
-         + this.state.pool && swimmingRate  ? swimmingRate : 0 
-         + this.state.parking && parkingRate  ? parkingRate : 0 
-         + this.state.meals && mealRate ? mealRate : 0  }
+                                ${Math.round(amenitiesRate * this.state.numRooms * 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '16px', fontWeight : '600'}}>
                                 Total cash rate
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '16px', fontWeight : '600'}}>
-                                ${Math.round((price + amenitiesRate))}
+                                ${Math.round((price + amenitiesRate)* 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '16px', fontWeight : '600', borderBottom : '1px solid #d6d6d6'}}>
                                 Estimated government taxes and fees
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '16px', fontWeight : '600', borderBottom : '1px solid #d6d6d6'}}>
-                                ${Math.round((price + amenitiesRate) * 0.2)}
+                                ${Math.round(((price + amenitiesRate) * 0.2)* 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', color: '#bf2e45'}}>
                                 Reward Points ({rewardPoints} points)
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', color: '#bf2e45'}}>
-                                -${Math.round(rewardPoints/10)}
+                                -${Math.round((rewardPoints/10)* 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', borderBottom : '1px solid #d6d6d6', color: '#bf2e45'}}>
                                 Loyalty Points ({loyaltyPoints} points)
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '14px', fontWeight : '600', borderBottom : '1px solid #d6d6d6', color: '#bf2e45'}}>
-                                -${Math.round(parseInt(loyaltyPoints))}
+                                -${Math.round(loyaltyPoints * 100)/100}
                             </Grid>
                             <Grid item xs={6} className={classes.rate} style={{fontSize : '19px', fontWeight : '700'}}>
                                 Total Stay
                             </Grid>
                             <Grid item xs={4} className={classes.rate} style={{fontSize : '19px', fontWeight : '700', marginBottom : '30px'}}>
-                                ${Math.round(((price + amenitiesRate) * 1.2) - rewardPoints/10 - loyaltyPoints)}
+                                ${Math.round((((price + amenitiesRate) * 1.2) - rewardPoints/10 - loyaltyPoints)* 100)/100}
                             </Grid>
                         </Grid>
                     </Grid>

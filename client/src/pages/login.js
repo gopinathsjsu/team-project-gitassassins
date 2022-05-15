@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 //redux
 import {connect} from 'react-redux'
 import axios from 'axios'
-import { LOGIN_USER } from '../redux/types'
+import { LOGIN_USER, GET_LOYALTY } from '../redux/types'
 import store from '../redux/store'
 
 const styles = (theme) => ({
@@ -83,6 +83,14 @@ class login extends Component {
                 store.dispatch({
                     type : LOGIN_USER,
                     payload : res.data
+                })
+
+                axios.get(`/customer/loyalty/${this.props.user.authenticatedUser._id}`).then((res) => {
+                    console.log("load loyalty" + JSON.stringify(res.data))
+                    store.dispatch({
+                        type: GET_LOYALTY,
+                        payload: res.data,
+                    })
                 })
 
                 this.props.history.push('/')
