@@ -18,7 +18,7 @@ export class HotelService {
 				adminEmail: req.body.adminEmail,
 				adminPassword: req.body.adminPassword,
 				hotelName: req.body.hotelName,
-				hotelAddress: req.body.hotelAddress,
+				hotelAddress: req.body.address,
 				seasonalHike: req.body.seasonalHike,
 				amenitiesCost: req.body.amenitiesCost,
 				photoUrl: req.body.photoUrl,
