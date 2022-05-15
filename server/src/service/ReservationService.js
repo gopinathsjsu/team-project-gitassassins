@@ -204,6 +204,107 @@ export class ReservationService {
 	};
 
 
+	updateReservationDate = async(req, res) => {
+		try {
+			const reservationId = req.params.reservationId;
+			const startDate = new Date(req.body.startDate);
+			const endDate = new Date(req.body.endDate);
+			const numberOfGuests = req.body.numberOfGuests;
+			var maximumOccupancy = 0
+			var newBill=0;
+			var orginalBill=0;
+		
+			const originalReservation = await Reservation.find({
+				reservationId: reservationId,
+			});
+			const hotelId = originalReservation[0].hotelId;
+			
+
+			const roomTypes = originalReservation.map(({ roomType }) => roomType);
+			const roomTypeFreq = {}
+			for (const roomType of roomTypes) {
+				roomTypeFreq[roomType] = roomTypeFreq[roomType] ? roomTypeFreq[roomType] + 1 : 1;
+			  }
+			
+			// const roomTypeNumber = {
+			// 	"SUITE": originalReservation.map(({ "" }) => brand);
+			// 	, "SINGLE", "KING", "QUEEN"
+			// }
+
+			
+			orginalBill = originalReservation[0].totalBill;
+
+			console.log("originalBill",originalReservation[0].totalBill);
+			const roomAvailibility = await roomService.searchRoomAvailabilityPrice(
+				hotelId,
+				startDate,
+				endDate
+			)
+			for (let roomType in roomTypeFreq) {
+				const room = roomAvailibility.find(x=>x.type===roomType);
+				console.log("Room", room)
+				if(room.availableRooms<roomTypeFreq[roomType])
+				{
+					return res.status(200).send({
+								message: "Room not available for selected date",
+							});
+				}
+				maximumOccupancy+=roomAvailibility.maximumOccupancy
+				newBill+= (room.price*roomTypeFreq[roomType])
+				console.log("newBill",typeof(room.price), typeof(roomTypeFreq));
+
+			}
+			console.log("final Bill",newBill);
+
+			if (maximumOccupancy<numberOfGuests){
+				return res.status(200).send({
+					message: "Too many guests. Please create a new reservation instead",
+				});
+
+			}
+
+			// update(
+			// 	{ _id: { $in: ['id1', 'id2', 'id3'] } },
+			// 	{ $set: { visibility : yourvisibility } },
+			// 	{multi: true}
+			//  )
+			
+			let msg =`Successfully Updated! Your new Bill is: $${newBill}. `
+			if (newBill-orginalBill<0){
+				msg+=`You will get a refund of $${orginalBill-newBill}.`
+			}
+			else if(newBill-orginalBill>0){
+				msg+=`You will be charged additional $${newBill-orginalBill}.`
+
+			}
+			console.log(msg);
+			const reservation = await Reservation.updateMany(
+				{ reservationId: reservationId },
+				{
+					$set: {
+						startDate: startDate,
+						endDate: endDate,
+						numberOfGuests: numberOfGuests,
+						totalBill: newBill,
+					},
+				},
+				{ upsert: true }
+			);
+
+
+			
+			console.log(reservation);
+
+			return res.status(200).send({
+				 message: msg,
+				 reservation: reservation
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+
 
 	cancelReservation = async(req, res) => {
 		try{

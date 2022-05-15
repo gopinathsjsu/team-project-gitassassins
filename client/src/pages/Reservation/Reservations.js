@@ -12,17 +12,10 @@ import {
     Button,
     Grid,
     TextField,
-    FormControl,
-    FormControlLabel,
-    Checkbox,
-    InputLabel,
-    Select,
-    MenuItem
   } from "@material-ui/core";
   import {
     Apartment as HotelIcon,
     ExpandMore as ExpandIcon,
-    Label,
   } from "@material-ui/icons";
   import { Modal } from 'react-bootstrap'
   import { KeyboardDatePicker , MuiPickersUtilsProvider} from "@material-ui/pickers";
@@ -83,11 +76,9 @@ export default function Reservations() {
 
   const [reservations, setReservations] = useState([]);
   const [reservationByIds, setReservationByIds] = useState({});
-  const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
   const [activeReservationId, setActiveReservationId] = useState(false);
-//   const [hotels, setHotels] = useState(null);
   const handleChange = (reservationId) => (event, expanded) => {
     setActiveReservationId(expanded ? reservationId : false);
   };
@@ -97,25 +88,25 @@ export default function Reservations() {
   const [modalOpen, setModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
-  const [selectedStartDate, handleStartDateChange] = useState(new Date());
-  const [selectedEndDate, handleEndDateChange] = useState(new Date());
+  const [selectedStartDate, handleStartDateChange] = useState();
+  const [selectedEndDate, handleEndDateChange] = useState();
+  const [newGuest, handleNumberOfGuests] = useState();
   const customerId = "626e4ef69f02707335d0c4d2";
 
 
-//   const [checked, setChecked] = React.useState(Object.values(item.amenities));
 
-    const [checked, setChecked] = React.useState([false, false, false, false, false]);
+    // const [checked, setChecked] = React.useState([false, false, false, false, false]);
 
-    const handleCheck = (pos) => {
-    console.log("in handle check")
-    const updatedCheckedState = checked.map((item, index) =>
-    index === pos ? !item : item
-  );
+//     const handleCheck = (pos) => {
+//     console.log("in handle check")
+//     const updatedCheckedState = checked.map((item, index) =>
+//     index === pos ? !item : item
+//   );
 
 
-  setChecked(updatedCheckedState);
+//   setChecked(updatedCheckedState);
 
-  }
+//   }
   
 
   const openUpdateModal = () => { setModalOpen(true); 
@@ -155,7 +146,6 @@ export default function Reservations() {
   
     const cancelReservation = (reservationId) =>
     {
-        console.log(reservationId);
         axios.put(`/reservation/customer/cancel/${reservationId}`)
       .then(response => {
         console.log("Reservation Cancel Response", response.data);
@@ -166,6 +156,27 @@ export default function Reservations() {
           console.log("Error", err.response);
         }
       });
+
+    }
+
+    const updateReservation = async(reservationId) =>{
+            console.log("Functon data",selectedStartDate, selectedEndDate, activeReservationId);
+            let req ={
+                "startDate" : selectedStartDate,
+                "endDate" : selectedEndDate,
+                "numberOfGuests": newGuest
+            }
+            console.log("request", reservationId);
+            await axios.put(`/reservation/customer/update/${activeReservationId}`, req)
+            .then(response => {
+              console.log("Reservation Update Response", response.data);
+              alert(response.data.message);
+            })
+            .catch(err => {
+              if (err.response && err.response.data) {
+                console.log("Error", err.response);
+              }
+            });
 
     }
     const cancelModal = (reservationId) => {
@@ -197,14 +208,12 @@ export default function Reservations() {
   
     }
 
-
-
-    const updateModal = (rooms) => {
-  
-  
-
+    const updateModal = (rooms, guests, startDate, endDate) => {
+   
+        console.log("startDate",typeof(startDate), startDate); 
+        console.log("Modal data", guests, startDate, endDate, rooms[0].reservationId);
         return (
-    
+            
           <Modal show={modalOpen} onHide={closeUpdateModal}
             onClose={closeUpdateModal}>
             <Modal.Header >
@@ -215,14 +224,17 @@ export default function Reservations() {
                 <Grid container alignItems="center" justify="center" direction="column">
                   <Grid item style = {{marginBottom:20}}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      
                        <KeyboardDatePicker
                         
                         label="Check-in Date"
                         clearable
+                        initialFocusedDate={null}
                         value={selectedStartDate}
-                        placeholder="10/10/2018"
+                        defaultValue={Date.parse(startDate)}
+                        placeholder={startDate}
                         onChange={date => handleStartDateChange(date)}
-                        minDate={new Date()}
+                        // minDate={new Date()}
                         format="MM/dd/yyyy"
                       />
                     </MuiPickersUtilsProvider>
@@ -234,6 +246,7 @@ export default function Reservations() {
                         label="Check-out Date"
                         clearable
                         value={selectedEndDate}
+                        defaultValue={Date.parse(endDate)}
                         placeholder="10/10/2018"
                         onChange={date => handleEndDateChange(date)}
                         minDate={new Date()}
@@ -249,104 +262,16 @@ export default function Reservations() {
                       name="guest"
                       label="Number of Guests"
                       type="number"
+                      value = {newGuest}
+                      onChange = {e => handleNumberOfGuests(e.target.value)}
                       style ={{width: 220}}
+                      defaultValue={guests}
                     />
                   </Grid>
                   <br/>
-                 { 
-                    
                  
-                 rooms.map((item, i) => (
-                //   <Rooms roomId={i} 
-                //          reservationId = {key}
-                //          currRoom = {item} /> 
-                    <div style={{justifyContent:"center",
-     
-                }}>
-
-                   <InputLabel
-                        variant="standard"
-                        color="primary"
-                        style={{
-                            alignItems:"flex-end",
-                            width:220,
-                            color:"black",
-                            fontSize:18,
-                        }}
-                   >Room {i+1}</InputLabel>         
-                    <div style={{justifyContent:"center",
-     
-                    }}>
-                        <Grid item>
-                        
-                        <TextField
-        
-                        id="room"
-                        name="room"
-                        label="Number of Rooms"
-                        type="number"
-                        style ={{width: "220"}}
-                        
-        
-                        />
-                    </Grid>
-                    <br/>
-                    <Grid item >
-                    <InputLabel id="demo-simple-select-label">Room Type</InputLabel>
-
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        //value={age}
-                        label="Room Type"
-                        style ={{width: "220"}}
-                        //onChange={handleChange}
-                    >
-                        <MenuItem value={10}>SUITE</MenuItem>
-                        <MenuItem value={20}>SINGLE</MenuItem>
-                        <MenuItem value={30}>KING</MenuItem>
-                        <MenuItem value={30}>QUEEN</MenuItem>
-
-                    </Select>
-                    </Grid>
-                    {/* <Grid item >
-                     
-                        <TextField
-                        id="name-input"
-                        name="type"
-                        label="Room Type"
-                        type="text"
-                        style ={{width: 220}}
-                        
-
-                        />
-                    </Grid> */}
-
-                    <br/>
-                    <Grid item >
-                        <FormControl
-                        style= {{flex:1, display: "flex", flexDirection: "row",}}>
-                        <FormControlLabel control={<Checkbox id={0} checked = {checked[0]} onChange = {()=>handleCheck(0)}/>} label="Breakfast" />
-                        <FormControlLabel control={<Checkbox id= {1} checked = {checked[1]} onChange = {()=>handleCheck(1)}/>} label="Fitness Room" />
-                        <FormControlLabel control={<Checkbox id = {2} checked = {checked[2]} onChange = {()=>handleCheck(2)}/>} label="Pool" />
-                        <FormControlLabel control={<Checkbox id = {3} checked = {checked[3]} onChange = {()=>handleCheck(3)}/>} label="Parking" />
-                        <FormControlLabel control={<Checkbox id = {4} checked = {checked[4]} onChange = {()=>handleCheck(4)}/>} label="Meals" />
-        
-        
-                        </FormControl>
-                    </Grid>
-                    <Divider/>
-
-                    <br/>
-                    </div>
-                    </div>
-
-
-                  )) }
-    
-                 
-                  
-                  <Button variant="contained" color="primary" type="submit">
+                   <Divider/>
+                  <Button variant="contained" color="primary" type="submit" onClick= {()=>{updateReservation(rooms[0].reservationId)}}>
                     Submit
                   </Button>
                 </Grid>
@@ -373,7 +298,7 @@ export default function Reservations() {
             
             const {totalBill, status, numberOfGuests, startDate, endDate} = reservationByIds[key][0]
             const active = activeReservationId === reservationId;
-            var newRooms 
+
             return (
                 <>
               <Accordion
@@ -417,21 +342,10 @@ export default function Reservations() {
                 <AccordionDetails>
                 <List className={classes.offerList}>
                 <Divider />
-                {/* {
-                        newRooms = reservationByIds[key].reduce(function(a, b) {
-                        if(a[b['roomType']]) {
-                          a[b['roomType']].push( {amenities: b['amenities'], _id: b['_id'] } )
-                        } else {
-                          a[b['cuisine']] = [ {amenities: b['amenities'], _id: b['_id'] }]
-                        }
-                        return a
-                      }, {})
-                    
-                }
+               
                 {
-                    console.log("reservations by id", reservationByIds[key], newRooms)
-                } */}
-                { reservationByIds[key].map((item, i) => (
+                
+                reservationByIds[key].map((item, i) => (
                   <Rooms roomId={i} 
                          reservationId = {key}
                          currRoom = {item} /> 
@@ -463,7 +377,7 @@ export default function Reservations() {
                 </AccordionDetails>
               </Accordion>
               {cancelModal(key)}
-          {updateModal(reservationByIds[key])}
+          {updateModal(reservationByIds[key], numberOfGuests, startDate, endDate)}
               </>
               
             );
