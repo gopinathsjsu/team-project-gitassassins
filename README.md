@@ -25,6 +25,10 @@ https://docs.google.com/spreadsheets/d/1uIeno8bf9UtKi7ogyUhMuP5DvjrKRvEzg1yo4nI-
 ### Weekly Scrum Report
 https://docs.google.com/document/d/1bk27Nhc9f9v79aHdvfNKA87wD9j6l1313c4kjVFFsLg/edit?usp=sharing
 
+### Project Board
+https://brave-pine-efc.notion.site/202-Term-Project-9d215d93d97a4036b4c9845dc91a1164
+
+
 ## Technology Used -
 * Frontend - ReactJS
 * Backend - ExpressJS
